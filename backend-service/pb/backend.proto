@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package backend;
+
+option go_package = "./pb";
+
+// Fetch Setup Nickname Pool
+
+message FetchSetupNicknamePoolRequest {
+
+}
+
+message FetchSetupNicknamePoolResponse {
+  int64 code = 1;
+  string message = 2;
+  repeated string nicknames = 3;
+}
+
+// Create Nickname
+
+message CreateNicknameRequest {
+string nickname = 1;
+
+}
+
+message CreateNicknameResponse {
+  int64 code = 1;
+  string message = 2;
+}
+
+// Login
+
+message LoginRequest {
+  string nickname = 1;
+  string user_agent = 2;
+  string client_ip = 3;
+}
+
+message LoginResponse {
+  int64 code = 1;
+  string message = 2;
+  string session_id = 3;
+  string access_token = 4;
+  int64 access_token_expires_at = 5;
+  string refresh_token = 6;
+  int64 refresh_token_expires_at = 7;
+  string user_id = 8;
+}
+
+// Validate Token
+
+message ValidateTokenRequest { string access_token = 1; }
+
+message ValidateTokenResponse {
+  int64 code = 1;
+  string message = 2;
+  string user_id = 3;
+}
+
+
+// Refresh Token
+
+message RenewTokenRequest { string refresh_token = 1; }
+
+message RenewTokenResponse {
+  int64 code = 1;
+  string message = 2;
+  string access_token = 3;
+  int64 access_token_expires_at = 4;
+}
+
+
+service BackendService {
+  rpc FetchSetupNicknamePool(FetchSetupNicknamePoolRequest) returns (FetchSetupNicknamePoolResponse) {}
+  rpc CreateNickname(CreateNicknameRequest) returns (CreateNicknameResponse) {}
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
+  rpc RenewToken(RenewTokenRequest) returns (RenewTokenResponse) {}
+}

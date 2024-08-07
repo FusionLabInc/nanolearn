@@ -7,8 +7,9 @@ import (
 )
 
 type Env struct {
-	AppEnv         string `mapstructure:"ENVIRONMENT"`
-	AppServerPort     string `mapstructure:"SERVER_PORT"`
+	AppEnv           string `mapstructure:"ENVIRONMENT"`
+	AppServerUrl     string `mapstructure:"SERVER_URL"`
+	BackendServerUrl string `mapstructure:"BACKEND_SERVER_URL"`
 }
 
 func NewEnv() *Env {

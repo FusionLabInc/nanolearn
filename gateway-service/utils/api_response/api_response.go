@@ -1,257 +1,202 @@
 package api_response
 
 import (
-	"github.com/Ayobami-00/Eureka/eureka-api-auth-service-go/pb"
+	"net/http"
+
+	"github.com/FusionLabInc/nanolearn/gateway-service/pkg/backend/pb"
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc/codes"
 )
 
-type ApiResponse interface {
-	Success(message string, args map[string]interface{}) interface{}
-	ErrorInternal(message string) interface{}
-	ErrorBadRequest(message string) interface{}
-	ErrorNotFound(message string) interface{}
-	ErrorAlreadyExists(message string) interface{}
-}
-
-func Success(response interface{}, message string, args map[string]interface{}) interface{} {
+func Respond(ctx *gin.Context, response interface{}) interface{} {
 
 	switch r := response.(type) {
 
-	case *pb.RegisterResponse:
+	case *pb.FetchSetupNicknamePoolResponse:
 
 		rr := r
-		rr.Code = int64(codes.OK)
-		rr.Message = message
-		return rr
+
+		switch rr.Code {
+
+		case int64(codes.OK):
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": rr.Message,
+				"data": gin.H{
+					"nicknames": r.Nicknames,
+				},
+			})
+
+		case int64(codes.Internal):
+
+			ctx.JSON(http.StatusInternalServerError, BaseErrorResponse(rr.Message))
+
+		case int64(codes.InvalidArgument):
+
+			ctx.JSON(http.StatusBadRequest, BaseErrorResponse(rr.Message))
+
+		case int64(codes.NotFound):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		case int64(codes.AlreadyExists):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		default:
+
+			return nil
+
+		}
 
 	case *pb.LoginResponse:
 
 		rr := r
-		rr.Code = int64(codes.OK)
-		rr.Message = message
-		rr.SessionId = args["session_id"].(string)
-		rr.AccessToken = args["access_token"].(string)
-		rr.AccessTokenExpiresAt = args["access_token_expires_at"].(int64)
-		rr.RefreshToken = args["refresh_token"].(string)
-		rr.RefreshTokenExpiresAt = args["refresh_token_expires_at"].(int64)
-		rr.UserId = args["user_id"].(string)
-		return rr
 
-	case *pb.ValidateResponse:
+		switch rr.Code {
+
+		case int64(codes.OK):
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": rr.Message,
+				"data": gin.H{
+					"session_id":               rr.SessionId,
+					"access_token":             rr.AccessToken,
+					"access_token_expires_at":  rr.AccessTokenExpiresAt,
+					"refresh_token":            rr.RefreshToken,
+					"refresh_token_expires_at": rr.RefreshTokenExpiresAt,
+					"user_id":                  rr.UserId,
+				},
+			})
+
+		case int64(codes.Internal):
+
+			ctx.JSON(http.StatusInternalServerError, BaseErrorResponse(rr.Message))
+
+		case int64(codes.InvalidArgument):
+
+			ctx.JSON(http.StatusBadRequest, BaseErrorResponse(rr.Message))
+
+		case int64(codes.NotFound):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		case int64(codes.AlreadyExists):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		default:
+
+			return nil
+
+		}
+
+	case *pb.ValidateTokenResponse:
 
 		rr := r
-		rr.Code = int64(codes.OK)
-		rr.Message = message
-		rr.UserId = args["user_id"].(string)
-		return rr
+
+		switch rr.Code {
+
+		case int64(codes.OK):
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": rr.Message,
+				"data": gin.H{
+					"user_id": rr.UserId,
+				},
+			})
+
+		case int64(codes.Internal):
+
+			ctx.JSON(http.StatusInternalServerError, BaseErrorResponse(rr.Message))
+
+		case int64(codes.InvalidArgument):
+
+			ctx.JSON(http.StatusBadRequest, BaseErrorResponse(rr.Message))
+
+		case int64(codes.NotFound):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		case int64(codes.AlreadyExists):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		default:
+
+			return nil
+
+		}
 
 	case *pb.RenewTokenResponse:
 
 		rr := r
-		rr.Code = int64(codes.OK)
-		rr.Message = message
-		rr.AccessToken = args["access_token"].(string)
-		rr.AccessTokenExpiresAt = args["access_token_expires_at"].(int64)
-		return rr
+
+		switch rr.Code {
+
+		case int64(codes.OK):
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": rr.Message,
+				"data": gin.H{
+					"access_token":            rr.AccessToken,
+					"access_token_expires_at": rr.AccessTokenExpiresAt,
+				},
+			})
+
+		case int64(codes.Internal):
+
+			ctx.JSON(http.StatusInternalServerError, BaseErrorResponse(rr.Message))
+
+		case int64(codes.InvalidArgument):
+
+			ctx.JSON(http.StatusBadRequest, BaseErrorResponse(rr.Message))
+
+		case int64(codes.NotFound):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		case int64(codes.AlreadyExists):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		default:
+
+			return nil
+
+		}
 
 	default:
 
 		return nil
 
 	}
+
+	return nil
 }
 
-func ErrorInternal(response interface{}, message string) interface{} {
-
-	switch r := response.(type) {
-
-	case *pb.RegisterResponse:
-
-		rr := r
-		rr.Code = int64(codes.Internal)
-		rr.Message = message
-		return rr
-
-	case *pb.LoginResponse:
-
-		rr := r
-		rr.Code = int64(codes.Internal)
-		rr.Message = message
-		return rr
-
-	case *pb.ValidateResponse:
-
-		rr := r
-		rr.Code = int64(codes.Internal)
-		rr.Message = message
-		return rr
-
-	case *pb.RenewTokenResponse:
-
-		rr := r
-		rr.Code = int64(codes.Internal)
-		rr.Message = message
-		return rr
-
-	default:
-
-		return nil
-
+func BaseSuccessResponse(successMessage string) gin.H {
+	return gin.H{
+		"status":  "success",
+		"message": successMessage,
 	}
 }
 
-func ErrorBadRequest(response interface{}, message string) interface{} {
-
-	switch r := response.(type) {
-
-	case *pb.RegisterResponse:
-
-		rr := r
-		rr.Code = int64(codes.InvalidArgument)
-		rr.Message = message
-		return rr
-
-	case *pb.LoginResponse:
-
-		rr := r
-		rr.Code = int64(codes.InvalidArgument)
-		rr.Message = message
-		return rr
-
-	case *pb.ValidateResponse:
-
-		rr := r
-		rr.Code = int64(codes.InvalidArgument)
-		rr.Message = message
-		return rr
-
-	case *pb.RenewTokenResponse:
-
-		rr := r
-		rr.Code = int64(codes.InvalidArgument)
-		rr.Message = message
-		return rr
-
-	default:
-
-		return nil
-
+func BaseSuccessResponseWithData(successMessage string, data interface{}) gin.H {
+	return gin.H{
+		"status":  "success",
+		"message": successMessage,
+		"data":    data,
 	}
 }
 
-func ErrorNotFound(response interface{}, message string) interface{} {
-
-	switch r := response.(type) {
-
-	case *pb.RegisterResponse:
-
-		rr := r
-		rr.Code = int64(codes.NotFound)
-		rr.Message = message
-		return rr
-
-	case *pb.LoginResponse:
-
-		rr := r
-		rr.Code = int64(codes.NotFound)
-		rr.Message = message
-		return rr
-
-	case *pb.ValidateResponse:
-
-		rr := r
-		rr.Code = int64(codes.NotFound)
-		rr.Message = message
-		return rr
-
-	case *pb.RenewTokenResponse:
-
-		rr := r
-		rr.Code = int64(codes.NotFound)
-		rr.Message = message
-		return rr
-
-	default:
-
-		return nil
-
-	}
-}
-
-func ErrorAlreadyExists(response interface{}, message string) interface{} {
-
-	switch r := response.(type) {
-
-	case *pb.RegisterResponse:
-
-		rr := r
-		rr.Code = int64(codes.AlreadyExists)
-		rr.Message = message
-		return rr
-
-	case *pb.LoginResponse:
-
-		rr := r
-		rr.Code = int64(codes.AlreadyExists)
-		rr.Message = message
-		return rr
-
-	case *pb.ValidateResponse:
-
-		rr := r
-		rr.Code = int64(codes.AlreadyExists)
-		rr.Message = message
-		return rr
-
-	case *pb.RenewTokenResponse:
-
-		rr := r
-		rr.Code = int64(codes.AlreadyExists)
-		rr.Message = message
-		return rr
-
-	default:
-
-		return nil
-
-	}
-}
-
-func ErrorUnauthorized(response interface{}, message string) interface{} {
-
-	switch r := response.(type) {
-
-	case *pb.RegisterResponse:
-
-		rr := r
-		rr.Code = int64(codes.PermissionDenied)
-		rr.Message = message
-		return rr
-
-	case *pb.LoginResponse:
-
-		rr := r
-		rr.Code = int64(codes.PermissionDenied)
-		rr.Message = message
-		return rr
-
-	case *pb.ValidateResponse:
-
-		rr := r
-		rr.Code = int64(codes.PermissionDenied)
-		rr.Message = message
-		return rr
-
-	case *pb.RenewTokenResponse:
-
-		rr := r
-		rr.Code = int64(codes.PermissionDenied)
-		rr.Message = message
-		return rr
-
-	default:
-
-		return nil
-
+func BaseErrorResponse(errMessage string) gin.H {
+	return gin.H{
+		"status":  "failed",
+		"message": errMessage,
 	}
 }

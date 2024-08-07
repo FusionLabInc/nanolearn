@@ -24,8 +24,8 @@ func main() {
 
 	route.Setup(env, timeout, g)
 
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 
-	g.Run(env.AppServerPort)
+	g.Run(env.AppServerUrl)
 
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/FusionLabInc/nanolearn/backend-service/pb"
 )
 
-func (s *Server) FetchSetupNickname(ctx context.Context, req *pb.FetchSetupNicknamePoolRequest) (*pb.FetchSetupNicknamePoolResponse, error) {
+func (s *Server) FetchSetupNicknamePool(ctx context.Context, req *pb.FetchSetupNicknamePoolRequest) (*pb.FetchSetupNicknamePoolResponse, error) {
 
 	nicknameList := []string{"Coding", "Music", "Travel", "Food", "Nature", "Reading", "Writing", "Gaming", "Cooking", "Gardening",
 		"Photography", "Crafting", "Dancing", "Collecting", "Sports", "Soccer", "Basketball", "Tennis", "Swimming", "Hiking",

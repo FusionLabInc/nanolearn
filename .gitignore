@@ -1,0 +1,15 @@
+*.log
+.vscode
+
+
+# backend-service
+backend-service/cert/*.pem
+backend-service/commands.txt
+backend-service/.env
+
+# gateway-service
+gateway-service/.env
+
+# # eureka-api-business-service-python
+# eureka-api-business-service-python/.venv
+# eureka-api-business-service-python/.env

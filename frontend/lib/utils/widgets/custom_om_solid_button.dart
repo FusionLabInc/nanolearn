@@ -3,8 +3,8 @@ import 'package:frontend/utils/widgets/custom_button_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomOmSolidButton extends StatelessWidget {
-  const CustomOmSolidButton({
+class CustomNLSolidButton extends StatelessWidget {
+  const CustomNLSolidButton({
     super.key,
     @required this.onPressed,
     @required this.text,

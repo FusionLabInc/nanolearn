@@ -19,11 +19,11 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
 
   static const _verifyEmailUrl = '/v1/user/email/verify';
 
-  static const _updateDeviceInfo = '/v1/user/device_info/update';
+  static const _verifyOtpPath = '/v1/auth/otp/verify';
 
   static const _sendOtpPath = '/v1/auth/otp';
 
-  static const _verifyOtpPath = '/v1/auth/otp/verify';
+  static const _fetchNicknamesPoolPath = '/backend/nicknames/pool';
 
   final OmApiClient _apiClient;
   final String _baseApiUrl;
@@ -115,25 +115,6 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
   }
 
   @override
-  Future<Option<bool>> updateDeviceInfo() async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final mobileVersion = packageInfo.version;
-    const deviceType = kIsWeb ? "web" : "N/A";
-
-    final Map<String, dynamic> data = {};
-
-    data["device_type"] = deviceType;
-    data["version"] = mobileVersion;
-
-    await _apiClient.patch(
-      '$_baseApiUrl$_updateDeviceInfo',
-      data: data,
-    );
-
-    return some(true);
-  }
-
-  @override
   Future<Option<bool>> sendOtp(PostEmailParam params) async {
     await _apiClient.post(
       '$_baseApiUrl$_sendOtpPath',
@@ -156,6 +137,17 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
     );
 
     return OtpVerificationResponse.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  Future<FetchNicknamesPoolResponse> fetchNicknamesPool() async {
+    final response = await _apiClient.get(
+      '$_baseApiUrl$_fetchNicknamesPoolPath',
+    );
+
+    return FetchNicknamesPoolResponse.fromJson(
       response.data as Map<String, dynamic>,
     );
   }

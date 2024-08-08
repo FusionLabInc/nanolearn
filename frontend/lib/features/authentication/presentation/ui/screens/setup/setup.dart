@@ -74,6 +74,7 @@ class _SetupPageState extends State<SetupPage> {
           ),
           child: Container(
             width: AppConstants.getWidth(context),
+            height: 70.0.h,
             padding: EdgeInsets.symmetric(horizontal: 20.0.w),
             color: Colors.white,
             child: Row(
@@ -89,26 +90,19 @@ class _SetupPageState extends State<SetupPage> {
                       style:
                           Theme.of(context).textTheme.displayMedium!.copyWith(
                                 letterSpacing: 0.03.sp,
-                                fontSize: 23.0,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
                               ),
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CustomOmSolidButton(
-                    onPressed: () =>
-                        locator<NavigationService>().goNamed(registerRoute),
-                    isLoading: false,
-                    fontSize: 20.0,
-                    textColor: AppConstants.appBlack,
-                    text: AppConstants.signUpText,
-                    buttonColor: AppConstants.appPrimaryColor,
-                    widthS: ResponsiveWidget.isSmallScreen(context)
-                        ? 90.0.w
-                        : 25.0.w,
-                  ),
+                Text(
+                  "#JustNanoIt",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
                 ),
               ],
             ),
@@ -118,205 +112,70 @@ class _SetupPageState extends State<SetupPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: Container(
-                height: 709.0,
-                width: 517.0,
-                decoration: BoxDecoration(
-                  color: AppConstants.appWhite,
-                  borderRadius: BorderRadius.circular(
-                    30,
-                  ),
-                ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.0.w,
-                      vertical: 10.0.h,
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                          "We are excited that you want to try out our product \n\n",
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                letterSpacing: 0.03.sp,
+                                fontSize: 23.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                     ),
-                    child: Column(
-                      children: [
-                        Form(
-                            key: _setupPageformKey,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 16.0.h,
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    AppConstants.signInText,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w800,
-                                          color: AppConstants.appBlack,
-                                          fontSize: 10.0.sp,
-                                        ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.0.h,
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    AppConstants.signInCaptionText,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: AppConstants.appBlack,
-                                          fontSize: 5.0.sp,
-                                        ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 50.0.h,
-                                ),
-                                CustomOmTextFormField(
-                                  initialValue: bloc.signInEmail,
-                                  textInputAction: TextInputAction.done,
-                                  labelText: AppConstants.workEmailText,
-                                  labelTextFontSize: 5.0.sp,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 5.0.w,
-                                  ),
-                                  // controller: _emailController,
-                                  focusNode: _emailFocus,
-                                  inputFormatters: [
-                                    // Denies the user from adding a white space
-                                    // to the textfield input.
-                                    FilteringTextInputFormatter.deny(
-                                        RegExp(r'\s')),
-                                  ],
-                                  validator: Validators.compose([
-                                    Validators.patternRegExp(
-                                      AppConstants.validAppEmailRegex,
-                                      AppConstants
-                                          .invaidEmailValueValidatorString,
-                                    ),
-                                  ]),
-                                  onFieldSubmitted: (value) {
-                                    changeFocuNode(
-                                      from: _emailFocus,
-                                      to: _passwordFocus,
-                                      context: context,
-                                    );
-                                  },
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      bloc.signInEmail = value.trim();
-                                    }
-                                  },
-                                ),
-                                CustomOmTextFormField(
-                                  textInputAction: TextInputAction.done,
-                                  // controller: _pass,
-                                  focusNode: _passwordFocus,
-                                  labelText: AppConstants.passwordText,
-                                  labelTextFontSize: 5.0.sp,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 5.0.w,
-                                  ),
-                                  suffixIcon: Transform(
-                                    // Flips the icon to look like the one
-                                    // we have currently in the design.
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.rotationY(math.pi),
-                                    child: GestureDetector(
-                                      onTap: _togglePasswordSufficIcon,
-                                      child: !_obscureValue
-                                          ? const CustomOmTexFieldEyeCloseWidget()
-                                          : const CustomOmTexFieldEyeOpenWidget(),
-                                    ),
-                                  ),
-                                  validator: Validators.compose([
-                                    Validators.required(
-                                      AppConstants
-                                          .fieldIsRequiredValidatorString,
-                                    ),
-                                    Validators.minLength(
-                                      AppConstants.defaultPasswordLength,
-                                      AppConstants
-                                          .invalidPasswordValidatorString,
-                                    ),
-                                  ]),
-                                  obscureText: _obscureValue,
-                                  onChanged: (String value) {
-                                    bloc.signInPassword = value.trim();
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 30.0.h,
-                                ),
-                                ValueListenableBuilder(
-                                  valueListenable: _signInButtonLoading,
-                                  builder: (
-                                    BuildContext context,
-                                    bool signUpButtonLoadingValue,
-                                    Widget? child,
-                                  ) {
-                                    return CustomOmSolidButton(
-                                      onPressed: () => _handleSignIn(bloc),
-                                      isLoading: signUpButtonLoadingValue,
-                                      fontSize: 20.0,
-                                      textColor: AppConstants.appBlack,
-                                      text: AppConstants.signInText,
-                                      buttonColor: AppConstants.appPrimaryColor,
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 30.0.h,
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    text: AppConstants.signInNewToBridgecardText
-                                        .padRight(19),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 5.0.sp,
-                                        ),
-                                    children: [
-                                      WidgetSpan(
-                                        child: GestureDetector(
-                                          onTap: () =>
-                                              locator<NavigationService>()
-                                                  .goNamed(registerRoute),
-                                          child: Text(
-                                            AppConstants.signUpText,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppConstants
-                                                      .appPrimaryColor,
-                                                  fontSize: 5.0.sp,
-                                                ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 30.0.h,
-                                ),
-                              ],
-                            ))
-                      ],
+                    TextSpan(
+                      text: "You have access to ",
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                letterSpacing: 0.03.sp,
+                                fontSize: 23.0,
+                                fontWeight: FontWeight.w700,
+                              ),
                     ),
-                  ),
+                    TextSpan(
+                      text: "Nano ",
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                letterSpacing: 0.03.sp,
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.italic,
+                              ),
+                    ),
+                    TextSpan(
+                      text: " two of your favourite resources",
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                letterSpacing: 0.03.sp,
+                                fontSize: 23.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: 30.0.h,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CustomNLSolidButton(
+                cColor: AppConstants.appBlack.withOpacity(0.4),
+                onPressed: () =>
+                    locator<NavigationService>().goNamed(registerRoute),
+                isLoading: false,
+                fontSize: 20.0,
+                textColor: AppConstants.appBlack,
+                text: AppConstants.jumpInText,
+                buttonColor: AppConstants.appPrimaryColor,
+                widthS:
+                    ResponsiveWidget.isSmallScreen(context) ? 90.0.w : 25.0.w,
+              ),
+            ),
           ],
         ),
       ),

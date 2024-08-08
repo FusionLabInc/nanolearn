@@ -183,7 +183,7 @@ class OmApiClient {
       final token = await _apiConfig.bearerToken!();
       if (token.isNotEmpty) {
         headers["token"] = "Bearer $token";
-        headers["ngrok-skip-browser-warning"] = "ess";
+        // headers["ngrok-skip-browser-warning"] = "ess";
       }
     }
 

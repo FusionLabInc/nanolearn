@@ -13,29 +13,29 @@ Future<ApiResult<T>> apiInterceptor<T>(
     );
   }
 
-  try {
-    final result = await future;
-    return ApiResult.success(data: result);
-  } on DioException catch (exception) {
-    return onDioError(
-      exception,
-      [
-        // We ignore this status code because it is the default response from the [LinkingDataSource.onebridgeBankAuth] endpoint
-        // and we require this status code to pass through our [apiInterceptor] as the error is properly handled on the UI layer.
-        451,
-      ],
-    );
-  } on PlatformException catch (e) {
-    return ApiResult.apiFailure(
-      error: ApiExceptions.fireBaseAuthException(e.code),
-    );
-  } catch (_) {
-    return const ApiResult.apiFailure(
-      error: ApiExceptions.defaultError(
-        'An internal error occurred. Please try again later',
-      ),
-    );
-  }
+  // try {
+  final result = await future;
+  return ApiResult.success(data: result);
+  // } on DioException catch (exception) {
+  //   return onDioError(
+  //     exception,
+  //     [
+  //       // We ignore this status code because it is the default response from the [LinkingDataSource.onebridgeBankAuth] endpoint
+  //       // and we require this status code to pass through our [apiInterceptor] as the error is properly handled on the UI layer.
+  //       451,
+  //     ],
+  //   );
+  // } on PlatformException catch (e) {
+  //   return ApiResult.apiFailure(
+  //     error: ApiExceptions.fireBaseAuthException(e.code),
+  //   );
+  // } catch (_) {
+  //   return const ApiResult.apiFailure(
+  //     error: ApiExceptions.defaultError(
+  //       'An internal error occurred. Please try again later',
+  //     ),
+  //   );
+  // }
 }
 
 ApiResult<T> onDioError<T>(

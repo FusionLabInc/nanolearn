@@ -154,7 +154,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                                       bool signUpButtonLoadingValue,
                                       Widget? child,
                                     ) {
-                                      return CustomOmSolidButton(
+                                      return CustomNLSolidButton(
                                         onPressed: () {
                                           _confirmOtpButtonLoading.value = true;
                                           bloc

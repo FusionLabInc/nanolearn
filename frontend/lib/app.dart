@@ -95,7 +95,7 @@ class _AppState extends State<App> {
         builder: (context, widget) => MultiProvider(
           providers: [
             BlocProvider(
-              create: (_) => _authenticationCubit,
+              create: (_) => _authenticationCubit..fetchNicknamesPoolLogic(),
             ),
             BlocProvider(
               create: (_) => _coreCubit,

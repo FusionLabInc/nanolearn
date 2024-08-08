@@ -10,3 +10,4 @@ export 'custom_password_validator.dart';
 export 'custom_selector_button.dart';
 export 'responsive_widget.dart';
 export 'custom_countup_animation.dart';
+export 'custom_bridgecard_multiple_choice_widget.dart';

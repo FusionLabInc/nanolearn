@@ -24,7 +24,7 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 				"status":  "success",
 				"message": rr.Message,
 				"data": gin.H{
-					"nicknames": r.Nicknames,
+					"nicknames_pool": r.NicknamesPool,
 				},
 			})
 

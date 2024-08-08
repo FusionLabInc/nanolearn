@@ -13,7 +13,7 @@ void setUpAuthenticationDependencies() {
   locator.registerLazySingleton(() => SignIn(locator()));
   locator.registerLazySingleton(() => SignOut(locator()));
   locator.registerLazySingleton(() => VerifyEmail(locator()));
-  locator.registerLazySingleton(() => UpdateDeviceInfo(locator()));
+  locator.registerLazySingleton(() => FetchNicknamesPool(locator()));
   locator.registerLazySingleton(() => SendOtp(locator()));
   locator.registerLazySingleton(() => VerifyOtp(locator()));
 

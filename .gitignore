@@ -10,6 +10,9 @@ backend-service/.env
 # gateway-service
 gateway-service/.env
 
+# frontend
+frontend/.env.dart
+
 # # eureka-api-business-service-python
 # eureka-api-business-service-python/.venv
 # eureka-api-business-service-python/.env

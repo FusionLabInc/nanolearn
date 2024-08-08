@@ -3,5 +3,5 @@ export 'register.dart';
 export 'send_password_reset_email.dart';
 export 'sign_in.dart';
 export 'sign_out.dart';
-export 'update_device_info.dart';
+export 'fetch_nicknames_pool.dart';
 export 'verify_email.dart';

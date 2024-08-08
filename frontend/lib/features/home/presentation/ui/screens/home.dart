@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: CustomOmSolidButton(
+                  child: CustomNLSolidButton(
                     onPressed: () =>
                         locator<NavigationService>().goNamed(registerRoute),
                     isLoading: false,

@@ -5,6 +5,7 @@ import (
 
 	"github.com/FusionLabInc/nanolearn/gateway-service/api/route"
 	"github.com/FusionLabInc/nanolearn/gateway-service/bootstrap"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,6 +26,12 @@ func main() {
 	route.Setup(env, timeout, g)
 
 	// gin.SetMode(gin.ReleaseMode)
+
+	g.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"PUT", "PATCH", "GET", "POST", "OPTIONS"},
+		AllowHeaders: []string{"Origin, X-Requested-With, Content-Type, Accept"},
+	}))
 
 	g.Run(env.AppServerUrl)
 

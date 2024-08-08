@@ -7,4 +7,7 @@ proto:
 cert:
 	cd cert; ./gen.sh; cd ..
 
-.PHONY: proto cert
+server:
+	go run cmd/main.go
+
+.PHONY: proto cert server

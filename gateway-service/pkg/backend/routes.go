@@ -12,7 +12,7 @@ func RegisterRoutes(r *gin.Engine, env *bootstrap.Env) *ServiceClient {
 	}
 
 	routes := r.Group("/backend")
-	routes.GET("/nicknames", svc.FetchSetupNicknamePool)
+	routes.GET("/nicknames/pool", svc.FetchSetupNicknamePool)
 	// routes.POST("/login", svc.Login)
 	// routes.POST("/token", svc.RenewToken)
 

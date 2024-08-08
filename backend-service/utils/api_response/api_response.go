@@ -22,7 +22,7 @@ func Success(response interface{}, message string, args map[string]interface{}) 
 		rr := r
 		rr.Code = int64(codes.OK)
 		rr.Message = message
-		rr.Nicknames = args["nicknames"].([]string)
+		rr.NicknamesPool = args["nicknamesPool"].([]string)
 		return rr
 
 	// case *pb.LoginResponse:

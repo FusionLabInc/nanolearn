@@ -28,5 +28,5 @@ abstract class AuthenticationRepo {
     PostEmailParam params,
   );
 
-  Future<ApiResult<Option<bool>>> updateDeviceInfo();
+  Future<ApiResult<FetchNicknamesPoolResponse>> fetchNicknamesPool();
 }

@@ -22,7 +22,7 @@ abstract class AuthenticationDataSource {
 
   Future<Option<bool>> sendPasswordResetEmail(PostEmailParam params);
 
-  Future<Option<bool>> updateDeviceInfo();
+  Future<FetchNicknamesPoolResponse> fetchNicknamesPool();
 
   Future<void> signOut();
 }

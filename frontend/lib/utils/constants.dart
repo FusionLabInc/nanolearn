@@ -87,6 +87,8 @@ class AppConstants {
   static const signInText = "Sign In";
   static const signUpText = "Sign Up";
 
+  static const jumpInText = "Jump In";
+
   static const confirmText = "Confirm";
 
   static const firstNameText = "First Name*";

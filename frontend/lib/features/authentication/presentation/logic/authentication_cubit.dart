@@ -20,7 +20,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
   SignIn signIn;
   SignOut signOut;
   VerifyEmail verifyEmail;
-  UpdateDeviceInfo updateDeviceInfo;
+  FetchNicknamesPool fetchNicknamesPool;
   SendOtp sendOtp;
   VerifyOtp verifyOtp;
 
@@ -65,7 +65,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
     this.signIn,
     this.signOut,
     this.verifyEmail,
-    this.updateDeviceInfo,
+    this.fetchNicknamesPool,
     this.verifyOtp,
     this.sendOtp,
   ) : super(AuthenticationInitial());
@@ -199,13 +199,13 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
     );
   }
 
-  Future<bool> updateDeviceInfoLogic() async {
+  Future<FetchNicknamesPoolResponse> fetchNicknamesPoolLogic() async {
     final param = NoParams();
-    final response = await updateDeviceInfo(param);
+    final response = await fetchNicknamesPool(param);
     return response.maybeWhen(
-      success: (data) => data.fold(() => false, (data) => data),
-      apiFailure: (exception, _) => false,
-      orElse: () => false,
+      success: (data) => data,
+      apiFailure: (exception, _) => FetchNicknamesPoolResponse.hasError(),
+      orElse: () => FetchNicknamesPoolResponse.hasError(),
     );
   }
 

@@ -54,8 +54,8 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   }
 
   @override
-  Future<ApiResult<Option<bool>>> updateDeviceInfo() {
-    return apiInterceptor(_authenticationDataSource.updateDeviceInfo());
+  Future<ApiResult<FetchNicknamesPoolResponse>> fetchNicknamesPool() {
+    return apiInterceptor(_authenticationDataSource.fetchNicknamesPool());
   }
 
   @override

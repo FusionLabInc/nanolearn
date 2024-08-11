@@ -2,16 +2,19 @@ package bootstrap
 
 import (
 	"log"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Env struct {
-	AppEnv             string `mapstructure:"ENVIRONMENT"`
-	AppServerPort      string `mapstructure:"SERVER_PORT"`
-	AppServerUrl       string `mapstructure:"SERVER_URL"`
-	GoogleConfigBase64 string `mapstructure:"GOOGLE_CONFIG_BASE64"`
-	TokenSymmetricKey  string `mapstructure:"TOKEN_SYMMETRIC_KEY"`
+	AppEnv               string        `mapstructure:"ENVIRONMENT"`
+	AppServerPort        string        `mapstructure:"SERVER_PORT"`
+	AppServerUrl         string        `mapstructure:"SERVER_URL"`
+	GoogleConfigBase64   string        `mapstructure:"GOOGLE_CONFIG_BASE64"`
+	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
+	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 }
 
 func NewEnv() *Env {

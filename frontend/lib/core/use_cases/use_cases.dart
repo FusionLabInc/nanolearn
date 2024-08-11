@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:grpc/grpc.dart';
 
 ///[Future].
 mixin UseCases<T, Params> {
@@ -14,4 +15,9 @@ mixin StreamUseCases<T, Params> {
 class NoParams extends Equatable {
   @override
   List<Object> get props => [];
+}
+
+///[ResponseStream].
+mixin ResponseStreamUseCases<T, Params> {
+  ResponseStream<T> call(Params params);
 }

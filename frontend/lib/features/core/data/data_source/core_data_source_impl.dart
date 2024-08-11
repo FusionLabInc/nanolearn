@@ -9,7 +9,7 @@ class CoreDataSourceImpl implements CoreDataSource {
   final _getSuperadminDetails = '/v1/superadmin/';
 
   // ignore: unused_field
-  final OmApiClient _apiClient;
+  final NLApiClient _apiClient;
   // ignore: unused_field
   final String _baseApiUrl;
 

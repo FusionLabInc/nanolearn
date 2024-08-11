@@ -25,18 +25,17 @@ func Success(response interface{}, message string, args map[string]interface{}) 
 		rr.NicknamesPool = args["nicknamesPool"].([]string)
 		return rr
 
-	// case *pb.LoginResponse:
+	case *pb.LoginResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.OK)
-	// 	rr.Message = message
-	// 	rr.SessionId = args["session_id"].(string)
-	// 	rr.AccessToken = args["access_token"].(string)
-	// 	rr.AccessTokenExpiresAt = args["access_token_expires_at"].(int64)
-	// 	rr.RefreshToken = args["refresh_token"].(string)
-	// 	rr.RefreshTokenExpiresAt = args["refresh_token_expires_at"].(int64)
-	// 	rr.UserId = args["user_id"].(string)
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.OK)
+		rr.Message = message
+		rr.AccessToken = args["access_token"].(string)
+		rr.AccessTokenExpiresAt = args["access_token_expires_at"].(int64)
+		rr.RefreshToken = args["refresh_token"].(string)
+		rr.RefreshTokenExpiresAt = args["refresh_token_expires_at"].(int64)
+		rr.UserId = args["user_id"].(string)
+		return rr
 
 	// case *pb.ValidateResponse:
 
@@ -112,12 +111,12 @@ func ErrorBadRequest(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.LoginResponse:
+	case *pb.LoginResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.InvalidArgument)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.InvalidArgument)
+		rr.Message = message
+		return rr
 
 	// case *pb.ValidateResponse:
 
@@ -151,12 +150,12 @@ func ErrorNotFound(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.LoginResponse:
+	case *pb.LoginResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.NotFound)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.NotFound)
+		rr.Message = message
+		return rr
 
 	// case *pb.ValidateResponse:
 
@@ -190,12 +189,12 @@ func ErrorAlreadyExists(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.LoginResponse:
+	case *pb.LoginResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.AlreadyExists)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.AlreadyExists)
+		rr.Message = message
+		return rr
 
 	// case *pb.ValidateResponse:
 
@@ -229,12 +228,12 @@ func ErrorUnauthorized(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.LoginResponse:
+	case *pb.LoginResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.PermissionDenied)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.PermissionDenied)
+		rr.Message = message
+		return rr
 
 	// case *pb.ValidateResponse:
 

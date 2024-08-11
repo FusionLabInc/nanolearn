@@ -10,7 +10,7 @@ import (
 
 func (s *Server) FetchSetupNicknamePool(ctx context.Context, req *pb.FetchSetupNicknamePoolRequest) (*pb.FetchSetupNicknamePoolResponse, error) {
 
-	nicknamesPool := []string{"Coding 👋🏼", "Music", "Travel", "Food", "Nature", "Reading", "Writing", "Gaming", "Cooking", "Gardening",
+	nicknamesPool := []string{"Coding", "Music", "Travel", "Food", "Nature", "Reading", "Writing", "Gaming", "Cooking", "Gardening",
 		"Photography", "Crafting", "Dancing", "Collecting", "Sports", "Soccer", "Basketball", "Tennis", "Swimming", "Hiking",
 		"Creative", "Funny", "Adventurous", "Intelligent", "Calm", "Happy", "Sad", "Angry", "Excited", "Surprised",
 		"Strong", "Confident", "Shy", "Curious", "Determined", "Cat", "Dog", "Bird", "Wolf", "Lion", "Forest",

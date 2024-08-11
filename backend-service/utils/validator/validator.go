@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/mail"
 
-	"github.com/Ayobami-00/Eureka/eureka-api-auth-service-go/pb"
+	"github.com/FusionLabInc/nanolearn/backend-service/pb"
 )
 
 // var (
@@ -19,8 +19,8 @@ func ValidateString(fieldName string, value string, minLength int, maxLength int
 	return nil
 }
 
-func ValidateUsername(value string) error {
-	if err := ValidateString("username", value, 3, 100); err != nil {
+func ValidateNickname(value string) error {
+	if err := ValidateString("nickname", value, 3, 100); err != nil {
 		return err
 	}
 	// if !isValidUsername(value) {
@@ -43,29 +43,9 @@ func ValidateEmail(value string) error {
 	return nil
 }
 
-func ValidateRegisterRequest(req *pb.RegisterRequest) error {
-	if err := ValidateUsername(req.GetUsername()); err != nil {
-		return err
-	}
-
-	if err := ValidateEmail(req.GetEmail()); err != nil {
-		return err
-	}
-
-	if err := ValidatePassword(req.GetPassword()); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func ValidateLoginRequest(req *pb.LoginRequest) error {
 
-	if err := ValidateEmail(req.GetEmail()); err != nil {
-		return err
-	}
-
-	if err := ValidatePassword(req.GetPassword()); err != nil {
+	if err := ValidateNickname(req.GetNickname()); err != nil {
 		return err
 	}
 

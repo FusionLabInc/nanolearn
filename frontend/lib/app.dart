@@ -49,6 +49,7 @@ class _AppState extends State<App> {
       locator(),
       locator(),
       locator(),
+      locator(),
     );
 
     _overviewCubit = OverviewCubit(

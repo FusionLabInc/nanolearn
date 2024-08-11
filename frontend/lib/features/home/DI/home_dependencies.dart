@@ -17,7 +17,7 @@ void setUpHomeCoreDependencies() {
   locator.registerLazySingleton<HomeDataSource>(
     () => HomeDataSourceImpl(
       locator(),
-      OmConfig.config.baseApiUrl!,
+      NLConfig.config.baseApiUrl!,
     ),
   );
 }

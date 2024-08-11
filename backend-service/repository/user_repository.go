@@ -6,6 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/FusionLabInc/nanolearn/backend-service/bootstrap"
+	"github.com/FusionLabInc/nanolearn/backend-service/domain"
 )
 
 const (
@@ -13,9 +14,9 @@ const (
 )
 
 type UserRepository interface {
-	Get(c context.Context, userID string) map[string]interface{}
-	Add(c context.Context, userID string, data interface{}) bool
-	FilterDb(c context.Context, field string, value string) map[string]interface{}
+	Get(c context.Context, userID string) *domain.User
+	Add(c context.Context, userID string, data domain.User) bool
+	FilterDb(c context.Context, field string, value string) *domain.User
 }
 
 type userRepository struct {
@@ -33,9 +34,7 @@ func NewUserRepository(db *bootstrap.Database) UserRepository {
 	}
 }
 
-func (ur *userRepository) Get(c context.Context, userID string) map[string]interface{} {
-
-	var userData map[string]interface{}
+func (ur *userRepository) Get(c context.Context, userID string) *domain.User {
 
 	data, err := ur.clientColRef.Doc(userID).Get(c)
 
@@ -49,33 +48,38 @@ func (ur *userRepository) Get(c context.Context, userID string) map[string]inter
 		return nil
 	}
 
-	userData = data.Data()
+	var user *domain.User
 
-	return userData
+	if err := data.DataTo(&user); err != nil {
+		fmt.Printf("error fetching user user exists: %v", err)
+		return nil
+	}
+
+	fmt.Println(user)
+
+	return user
 }
 
-func (ur *userRepository) Add(c context.Context, userID string, data interface{}) bool {
+func (ur *userRepository) Add(c context.Context, userID string, data domain.User) bool {
 
 	userData := ur.Get(c, userID)
 
-	if userData == nil {
+	if userData != nil {
 
-		fmt.Print("error adding user as user already exists")
-
-		return false
+		return true
 	}
 
-	_, err := ur.clientColRef.Doc(userID).Set(c, data)
+	_, newErr := ur.clientColRef.Doc(userID).Set(c, data)
 
-	if err != nil {
-		fmt.Printf("error adding user: %v", err)
+	if newErr != nil {
+		fmt.Printf("error adding user: %v", newErr)
 		return false
 	}
 
 	return true
 }
 
-func (ur *userRepository) FilterDb(c context.Context, field string, value string) map[string]interface{} {
+func (ur *userRepository) FilterDb(c context.Context, field string, value string) *domain.User {
 
 	var userData map[string]interface{}
 
@@ -94,7 +98,11 @@ func (ur *userRepository) FilterDb(c context.Context, field string, value string
 
 	doc := docs[0]
 
-	userData = doc.Data()
+	var user *domain.User
 
-	return userData
+	if err := doc.DataTo(user); err != nil {
+		return nil
+	}
+
+	return user
 }

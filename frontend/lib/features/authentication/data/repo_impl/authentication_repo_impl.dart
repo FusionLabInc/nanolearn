@@ -3,6 +3,8 @@ import 'package:frontend/features/authentication/data/data_source/index.dart';
 import 'package:frontend/features/authentication/data/models/index.dart';
 import 'package:frontend/features/authentication/domain/index.dart';
 import 'package:dartz/dartz.dart';
+import 'package:frontend/pb/llm.pb.dart';
+import 'package:grpc/src/client/common.dart';
 
 class AuthenticationRepoImpl extends AuthenticationRepo {
   final AuthenticationDataSource _authenticationDataSource;
@@ -12,15 +14,6 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   @override
   Future<ApiResult<Option<User>>> getSignedInUser() {
     return apiInterceptor(_authenticationDataSource.getSignedInUser());
-  }
-
-  @override
-  Future<ApiResult<Option<Unit>>> register(
-    RegisterParam params,
-  ) {
-    return apiInterceptor(
-      _authenticationDataSource.register(params),
-    );
   }
 
   @override
@@ -66,5 +59,17 @@ class AuthenticationRepoImpl extends AuthenticationRepo {
   @override
   Future<ApiResult<OtpVerificationResponse>> verifyOtp(VerifyOtpParam params) {
     return apiInterceptor(_authenticationDataSource.verifyOtp(params));
+  }
+
+  @override
+  ResponseStream<GenerateNicknameResponse> generateNickname(
+      GenerateNicknameParam params) {
+    return _authenticationDataSource.generateNickname(params);
+  }
+
+  @override
+  Future<ApiResult<GenerateNicknameV2Response>> generateNicknameV2(
+      GenerateNicknameV2Param params) {
+    return apiInterceptor(_authenticationDataSource.generateNicknameV2(params));
   }
 }

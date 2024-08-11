@@ -14,12 +14,13 @@ final config = AppConfig(
   baseApiUrl: environment['BASE_API_URL'] as String?,
   sentryDsn: environment["SENTRY_DSN"] as String?,
   sentryTracesSampleRate: environment["SENTRY_TRACE_SAMPLE_RATE"] as double?,
+  llmServerUrl: environment['LLM_SERVER_URL'] as String?,
 );
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
   // set app config
-  OmConfig.set(config);
+  NLConfig.set(config);
   setUpAppLocator();
 
   runZonedGuarded(

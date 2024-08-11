@@ -25,7 +25,7 @@ void setUpCoreCoreDependencies() {
   locator.registerLazySingleton<CoreDataSource>(
     () => CoreDataSourceImpl(
       locator(),
-      OmConfig.config.baseApiUrl!,
+      NLConfig.config.baseApiUrl!,
     ),
   );
 }

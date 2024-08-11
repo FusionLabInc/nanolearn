@@ -9,7 +9,7 @@ class BillingDataSourceImpl implements BillingDataSource {
   final _getSuperadminPublicDetails = '/v1/superadmin/';
   final _getBillingPublicDetails = '/v1/billing/';
 
-  final OmApiClient _apiClient;
+  final NLApiClient _apiClient;
   final String _baseApiUrl;
 
   BillingDataSourceImpl(

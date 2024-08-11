@@ -1,81 +1,67 @@
 package gapi
 
-// import (
-// 	"context"
-// 	"fmt"
+import (
+	"context"
+	"fmt"
 
-// 	"github.com/FusionLabInc/nanolearn/backend-service/domain"
-// 	"github.com/FusionLabInc/nanolearn/backend-service/repository"
-// 	"github.com/FusionLabInc/nanolearn/backend-service/usecase"
-// 	"github.com/FusionLabInc/nanolearn/backend-service/utils/api_response"
-// 	"github.com/FusionLabInc/nanolearn/backend-service/utils/crypto"
+	"github.com/FusionLabInc/nanolearn/backend-service/repository"
+	"github.com/FusionLabInc/nanolearn/backend-service/usecase"
+	"github.com/FusionLabInc/nanolearn/backend-service/utils/api_response"
 
-// 	"github.com/FusionLabInc/nanolearn/backend-service/pb"
-// 	"github.com/FusionLabInc/nanolearn/backend-service/utils/validator"
-// )
+	"github.com/FusionLabInc/nanolearn/backend-service/pb"
+	"github.com/FusionLabInc/nanolearn/backend-service/utils/validator"
+)
 
-// func (s *Server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (s *Server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 
-// 	err := validator.ValidateLoginRequest(req)
-// 	if err != nil {
-// 		return api_response.ErrorBadRequest(&pb.LoginResponse{}, err.Error()).(*pb.LoginResponse), nil
-// 	}
+	err := validator.ValidateLoginRequest(req)
+	if err != nil {
+		return api_response.ErrorBadRequest(&pb.LoginResponse{}, err.Error()).(*pb.LoginResponse), nil
+	}
 
-// 	ur := repository.NewUserRepository(s.Db, s.Timeout, s.Db.UsersTableName)
-// 	lu := usecase.NewLoginUsecase(ur)
+	ur := repository.NewUserRepository(s.Db)
+	lu := usecase.NewLoginUsecase(ur)
 
-// 	db_user, err := lu.GetUserByEmail(ctx, req.GetEmail())
-// 	if err != nil {
-// 		return api_response.ErrorNotFound(&pb.LoginResponse{}, "User doesn't exists with the given email").(*pb.LoginResponse), nil
-// 	}
+	var userId string
 
-// 	err = crypto.VerifyPassword(req.GetPassword(), db_user.Password)
-// 	if err != nil {
-// 		return api_response.ErrorInternal(&pb.LoginResponse{}, "Incorrect Password").(*pb.LoginResponse), nil
-// 	}
+	dbUser := lu.GetUserByUsername(ctx, req.GetNickname())
+	if dbUser == nil {
+		createRes := lu.Create(ctx, req.GetNickname())
 
-// 	accessToken, accessPayload, err := s.TokenMaker.CreateToken(
-// 		db_user.ID,
-// 		s.Env.AccessTokenDuration,
-// 	)
+		if createRes == nil {
+			return api_response.ErrorInternal(&pb.LoginResponse{}, fmt.Sprintf("Failed to create user: %s", err)).(*pb.LoginResponse), nil
+		}
 
-// 	if err != nil {
-// 		return api_response.ErrorInternal(&pb.LoginResponse{}, fmt.Sprintf("Failed to generate access token: %s", err)).(*pb.LoginResponse), nil
-// 	}
+		userId = *createRes
 
-// 	refreshToken, refreshPayload, err := s.TokenMaker.CreateToken(
-// 		db_user.ID,
-// 		s.Env.AccessTokenDuration,
-// 	)
+	} else {
+		userId = dbUser.ID
+	}
 
-// 	if err != nil {
-// 		return api_response.ErrorInternal(&pb.LoginResponse{}, fmt.Sprintf("Failed to generate refresh token: %s", err)).(*pb.LoginResponse), nil
-// 	}
+	accessToken, accessPayload, err := s.TokenMaker.CreateToken(
+		userId,
+		s.Env.AccessTokenDuration,
+	)
 
-// 	sr := repository.NewSessionRepository(s.Db, s.Timeout, s.Db.SessionsTableName)
+	if err != nil {
+		return api_response.ErrorInternal(&pb.LoginResponse{}, fmt.Sprintf("Failed to generate access token: %s", err)).(*pb.LoginResponse), nil
+	}
 
-// 	err = sr.Create(ctx, &domain.Session{
-// 		ID:           refreshPayload.ID.String(),
-// 		Name:         db_user.ID,
-// 		RefreshToken: refreshToken,
-// 		UserAgent:    req.GetUserAgent(),
-// 		ClientIp:     req.GetClientIp(),
-// 		IsBlocked:    false,
-// 		ExpiresAt:    refreshPayload.ExpiredAt.Unix(),
-// 	})
-// 	if err != nil {
-// 		return api_response.ErrorInternal(&pb.LoginResponse{}, err.Error()).(*pb.LoginResponse), nil
-// 	}
+	refreshToken, refreshPayload, err := s.TokenMaker.CreateToken(
+		userId,
+		s.Env.AccessTokenDuration,
+	)
 
-// 	sessionId := refreshPayload.ID.String()
+	if err != nil {
+		return api_response.ErrorInternal(&pb.LoginResponse{}, fmt.Sprintf("Failed to generate refresh token: %s", err)).(*pb.LoginResponse), nil
+	}
 
-// 	return api_response.Success(&pb.LoginResponse{}, "User successfully logged in", map[string]interface{}{
-// 		"session_id":               sessionId,
-// 		"access_token":             accessToken,
-// 		"access_token_expires_at":  accessPayload.ExpiredAt.Unix(),
-// 		"refresh_token":            refreshToken,
-// 		"refresh_token_expires_at": refreshPayload.ExpiredAt.Unix(),
-// 		"user_id":                  db_user.ID,
-// 	}).(*pb.LoginResponse), nil
+	return api_response.Success(&pb.LoginResponse{}, "User successfully logged in", map[string]interface{}{
+		"access_token":             accessToken,
+		"access_token_expires_at":  accessPayload.ExpiredAt.Unix(),
+		"refresh_token":            refreshToken,
+		"refresh_token_expires_at": refreshPayload.ExpiredAt.Unix(),
+		"user_id":                  userId,
+	}).(*pb.LoginResponse), nil
 
-// }
+}

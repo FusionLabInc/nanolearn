@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:frontend/features/authentication/domain/use_cases/send_otp.dart';
 import 'package:frontend/features/authentication/domain/use_cases/verify_otp.dart';
 import 'package:bloc/bloc.dart';
@@ -5,9 +7,11 @@ import 'package:frontend/core/index.dart';
 import 'package:frontend/features/authentication/data/index.dart';
 import 'package:frontend/features/authentication/domain/index.dart';
 import 'package:frontend/features/authentication/presentation/listeners/index.dart';
+import 'package:frontend/pb/llm.pb.dart';
 import 'package:frontend/utils/index.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:grpc/grpc.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 part 'authentication_state.dart';
@@ -15,7 +19,6 @@ part 'authentication_state.dart';
 class AuthenticationCubit extends Cubit<AuthenticationState>
     implements OnAppLogout {
   GetSignedInUser getSignedInUser;
-  Register register;
   SendPasswordResetEmail sendPasswordResetEmail;
   SignIn signIn;
   SignOut signOut;
@@ -23,6 +26,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
   FetchNicknamesPool fetchNicknamesPool;
   SendOtp sendOtp;
   VerifyOtp verifyOtp;
+  GenerateNickname generateNickname;
+  GenerateNicknameV2 generateNicknameV2;
 
   //Sign Up Bloc Values
   String? signUpWorkEmailAddress;
@@ -33,11 +38,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
   String? signUpCompanyName;
 
   //Sign In Bloc Values
-  String? signInEmail;
+  String? nickname;
   String? signInPassword;
 
   //Forgot Password Bloc Values
   String? forgotPasswordEmail;
+
+  List<String>? nicknmaesPool;
+
+  String? generatedNickname;
 
   Function(BuildContext context)? onOtpVerificationSuccessfull;
 
@@ -49,7 +58,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
     signUpPhonenumber = null;
     signUpCompanyName = null;
 
-    signInEmail = null;
+    nickname = null;
     signInPassword = null;
 
     forgotPasswordEmail = null;
@@ -60,7 +69,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
 
   AuthenticationCubit(
     this.getSignedInUser,
-    this.register,
     this.sendPasswordResetEmail,
     this.signIn,
     this.signOut,
@@ -68,6 +76,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
     this.fetchNicknamesPool,
     this.verifyOtp,
     this.sendOtp,
+    this.generateNickname,
+    this.generateNicknameV2,
   ) : super(AuthenticationInitial());
 
   void registerAuthListeners(List<Object?> listeners) {
@@ -118,28 +128,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
     );
   }
 
-  Future registerLogic() async {
-    emit(AuthenticationLoading());
-    final response = await register(
-      RegisterParam(
-        workEmailAddress: signUpWorkEmailAddress ?? "",
-        password: signUpPassword ?? "",
-        firstName: signUpFirstName ?? "",
-        phoneNumber: signUpPhonenumber ?? "",
-        lastName: signUpLastName ?? "",
-        companyName: signUpCompanyName ?? "",
-      ),
-    );
-    return response.maybeWhen(
-      success: (data) => data.fold(
-        () => AppConstants.defaultErrorMessage,
-        (value) => true,
-      ),
-      apiFailure: (exception, _) => ApiExceptions.getErrorMessage(exception),
-      orElse: () => AppConstants.defaultErrorMessage,
-    );
-  }
-
   Future sendPasswordResetEmailLogic() async {
     emit(ForgotPasswordLoading());
     final params = PostEmailParam(emailAddress: forgotPasswordEmail!);
@@ -159,8 +147,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
   Future signInLogic() async {
     emit(AuthenticationLoading());
     final params = SignInParam(
-      emailAddress: signInEmail ?? signUpWorkEmailAddress,
-      password: signInPassword,
+      nickname: generatedNickname,
     );
     final response = await signIn(params);
     return response.maybeWhen(
@@ -203,7 +190,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
     final param = NoParams();
     final response = await fetchNicknamesPool(param);
     return response.maybeWhen(
-      success: (data) => data,
+      success: (data) {
+        nicknmaesPool = data.nicknamesPool ?? [];
+        return data;
+      },
       apiFailure: (exception, _) => FetchNicknamesPoolResponse.hasError(),
       orElse: () => FetchNicknamesPoolResponse.hasError(),
     );
@@ -234,6 +224,33 @@ class AuthenticationCubit extends Cubit<AuthenticationState>
       orElse: () => OtpVerificationResponse.hasError(
         AppConstants.defaultErrorMessage,
       ),
+    );
+  }
+
+  ResponseStream<GenerateNicknameResponse> generateNicknameLogic(
+    StreamController<GenerateNicknameRequest>
+        generatedNicknameRequestStreamController,
+  ) {
+    return generateNickname(GenerateNicknameParam(
+        generatedNicknameRequestStreamController:
+            generatedNicknameRequestStreamController));
+  }
+
+  Future<GenerateNicknameV2Response> generateNicknameV2Logic(
+      GenerateNicknameV2Param param) async {
+    final response = await generateNicknameV2(param);
+    return response.maybeWhen(
+      success: (data) {
+        if (data.nickname == null || data.nickname!.isEmpty) {
+          return GenerateNicknameV2Response.hasError();
+        }
+
+        generatedNickname = data.nickname;
+
+        return data;
+      },
+      apiFailure: (exception, _) => GenerateNicknameV2Response.hasError(),
+      orElse: () => GenerateNicknameV2Response.hasError(),
     );
   }
 

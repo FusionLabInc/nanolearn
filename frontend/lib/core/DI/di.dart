@@ -16,7 +16,8 @@ void setupBaseDI({required NanolearnApiConfig nanolearnApiConfig}) {
   locator.registerLazySingleton<InternetConnection>(
     () => InternetConnectionImpl(locator()),
   );
-  locator.registerSingleton(OmApiClient(nanolearnApiConfig));
+  locator.registerSingleton(NLApiClient(nanolearnApiConfig));
+  locator.registerSingleton(NLGrpcClient(nanolearnApiConfig));
   locator.registerLazySingleton(() => NavigationService());
 }
 
@@ -24,7 +25,8 @@ void setupBaseDI({required NanolearnApiConfig nanolearnApiConfig}) {
 void setUpAppLocator() {
   setupBaseDI(
     nanolearnApiConfig: NanolearnApiConfig(
-      '',
+      NLConfig.config.baseApiUrl!,
+      NLConfig.config.llmServerUrl!,
       bearerToken: () async {
         try {
           final payload = await FlutterSessionJwt.retrieveToken();

@@ -18,7 +18,7 @@ void setUpOverviewCoreDependencies() {
   locator.registerLazySingleton<OverviewDataSource>(
     () => OverviewDataSourceImpl(
       locator(),
-      OmConfig.config.baseApiUrl!,
+      NLConfig.config.baseApiUrl!,
     ),
   );
 }

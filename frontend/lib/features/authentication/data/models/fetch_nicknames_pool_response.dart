@@ -19,9 +19,10 @@ class FetchNicknamesPoolResponse {
         (json["data"]["nicknames_pool"] ?? []) as List<dynamic>;
 
     return FetchNicknamesPoolResponse(
-        status: json['status'] as String?,
-        message: json['name'] as String?,
-        nicknamesPool: tempList as List<String>);
+      status: json['status'] as String?,
+      message: json['name'] as String?,
+      nicknamesPool: tempList.map((dynamic item) => item.toString()).toList(),
+    );
   }
 
   factory FetchNicknamesPoolResponse.hasError() =>

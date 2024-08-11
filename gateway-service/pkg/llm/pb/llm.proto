@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package llm;
+
+option go_package = "./pb";
+
+
+message GenerateNicknameRequest {
+  repeated string selectedNicknamesFromPool = 1;
+
+}
+
+message GenerateNicknameResponse {
+  string nickname = 1;
+}
+
+
+service LlmService {
+  rpc GenerateNickname(stream GenerateNicknameRequest) returns (stream GenerateNicknameResponse) {}
+}

@@ -8,7 +8,6 @@ import 'package:frontend/features/authentication/domain/use_cases/verify_otp.dar
 void setUpAuthenticationDependencies() {
   // Register usecases dependencies.
   locator.registerLazySingleton(() => GetSignedInUser(locator()));
-  locator.registerLazySingleton(() => Register(locator()));
   locator.registerLazySingleton(() => SendPasswordResetEmail(locator()));
   locator.registerLazySingleton(() => SignIn(locator()));
   locator.registerLazySingleton(() => SignOut(locator()));
@@ -16,6 +15,8 @@ void setUpAuthenticationDependencies() {
   locator.registerLazySingleton(() => FetchNicknamesPool(locator()));
   locator.registerLazySingleton(() => SendOtp(locator()));
   locator.registerLazySingleton(() => VerifyOtp(locator()));
+  locator.registerLazySingleton(() => GenerateNickname(locator()));
+  locator.registerLazySingleton(() => GenerateNicknameV2(locator()));
 
   // Register repository dependencies.
   locator.registerLazySingleton<AuthenticationRepo>(
@@ -28,7 +29,8 @@ void setUpAuthenticationDependencies() {
   locator.registerLazySingleton<AuthenticationDataSource>(
     () => AuthenticationDataSourceImpl(
       locator(),
-      OmConfig.config.baseApiUrl!,
+      locator(),
+      NLConfig.config.baseApiUrl!,
     ),
   );
 }

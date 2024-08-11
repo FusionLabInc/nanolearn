@@ -16,18 +16,6 @@ message FetchSetupNicknamePoolResponse {
   repeated string nicknamesPool = 3;
 }
 
-// Create Nickname
-
-message CreateNicknameRequest {
-string nickname = 1;
-
-}
-
-message CreateNicknameResponse {
-  int64 code = 1;
-  string message = 2;
-}
-
 // Login
 
 message LoginRequest {
@@ -39,12 +27,11 @@ message LoginRequest {
 message LoginResponse {
   int64 code = 1;
   string message = 2;
-  string session_id = 3;
-  string access_token = 4;
-  int64 access_token_expires_at = 5;
-  string refresh_token = 6;
-  int64 refresh_token_expires_at = 7;
-  string user_id = 8;
+  string access_token = 3;
+  int64 access_token_expires_at = 4;
+  string refresh_token = 5;
+  int64 refresh_token_expires_at = 6;
+  string user_id = 7;
 }
 
 // Validate Token
@@ -72,7 +59,7 @@ message RenewTokenResponse {
 
 service BackendService {
   rpc FetchSetupNicknamePool(FetchSetupNicknamePoolRequest) returns (FetchSetupNicknamePoolResponse) {}
-  rpc CreateNickname(CreateNicknameRequest) returns (CreateNicknameResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
   rpc RenewToken(RenewTokenRequest) returns (RenewTokenResponse) {}
 }

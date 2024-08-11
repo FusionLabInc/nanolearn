@@ -5,7 +5,7 @@ import 'package:frontend/features/customers/index.dart';
 
 class CustomersDataSourceImpl implements CustomersDataSource {
   static const _getAllCustomersPath = '/v1/customer';
-  final OmApiClient _apiClient;
+  final NLApiClient _apiClient;
   final String _baseApiUrl;
 
   CustomersDataSourceImpl(

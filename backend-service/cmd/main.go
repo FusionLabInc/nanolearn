@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/FusionLabInc/nanolearn/backend-service/bootstrap"
-	"github.com/FusionLabInc/nanolearn/backend-service/domain"
 	"github.com/FusionLabInc/nanolearn/backend-service/gapi"
 	"github.com/FusionLabInc/nanolearn/backend-service/pb"
 	"github.com/FusionLabInc/nanolearn/backend-service/repository"
@@ -29,11 +28,11 @@ func main() {
 
 	ur := repository.NewUserRepository(app.Db)
 
-	repository := domain.Repository{
+	repository := repository.Repository{
 		User: ur,
 	}
 
-	server, err := gapi.NewServer(env, *app.Db, repository, timeout)
+	server, err := gapi.NewServer(env, app.Db, repository, timeout)
 	if err != nil {
 		log.Fatal("Cannot create server :", err)
 	}

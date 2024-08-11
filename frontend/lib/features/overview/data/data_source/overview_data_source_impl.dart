@@ -7,7 +7,7 @@ import 'package:frontend/features/overview/domain/params/get_analytics_params.da
 class OverviewDataSourceImpl implements OverviewDataSource {
   static const _getAnalyticsPath = '/v1/analytics';
 
-  final OmApiClient _apiClient;
+  final NLApiClient _apiClient;
   final String _baseApiUrl;
 
   OverviewDataSourceImpl(

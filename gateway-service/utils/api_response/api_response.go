@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/FusionLabInc/nanolearn/gateway-service/pkg/backend/pb"
+	llm "github.com/FusionLabInc/nanolearn/gateway-service/pkg/llm/pb"
+
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc/codes"
 )
@@ -62,7 +64,6 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 				"status":  "success",
 				"message": rr.Message,
 				"data": gin.H{
-					"session_id":               rr.SessionId,
 					"access_token":             rr.AccessToken,
 					"access_token_expires_at":  rr.AccessTokenExpiresAt,
 					"refresh_token":            rr.RefreshToken,
@@ -169,6 +170,18 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 			return nil
 
 		}
+
+	case *llm.GenerateNicknameResponse:
+
+		rr := r
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Nickname Fetched",
+			"data": gin.H{
+				"nickname": rr.Nickname,
+			},
+		})
 
 	default:
 

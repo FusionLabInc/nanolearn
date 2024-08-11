@@ -1,46 +1,17 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'dart:async';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/core/DI/index.dart';
+import 'package:frontend/core/navigation/index.dart';
+import 'package:frontend/features/authentication/domain/index.dart';
 import 'package:frontend/features/authentication/presentation/index.dart';
+import 'package:frontend/pb/llm.pb.dart';
 import 'package:frontend/utils/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wc_form_validators/wc_form_validators.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart'
-    as intl_phone_number_input;
-import 'package:frontend/core/index.dart';
-
-import 'dart:math' as math;
-
-class MenuButton extends StatelessWidget {
-  const MenuButton({
-    super.key,
-    required this.label,
-    required this.builder,
-  });
-
-  final String label;
-  final WidgetBuilder builder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: OutlinedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: builder),
-          );
-        },
-        child: Text(label),
-      ),
-    );
-  }
-}
+import 'package:shimmer/shimmer.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -50,194 +21,38 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _obscureValue = true;
+  final StreamController<GenerateNicknameRequest>
+      generatedNicknameRequestStreamController =
+      StreamController<GenerateNicknameRequest>();
 
-  final FocusNode _firstNameFocus = FocusNode();
-  final FocusNode _lastNameFocus = FocusNode();
-  final FocusNode _emailFocus = FocusNode();
-  final FocusNode _passwordFocus = FocusNode();
-  final FocusNode _phoneNumberFocus = FocusNode();
-  final FocusNode _companyNameFocus = FocusNode();
+  final ValueNotifier<List<String>> _selectedNicknamesFromPoolList =
+      ValueNotifier(const [""]);
 
-  final GlobalKey<FormState> passwordValidatorKey = GlobalKey();
+  final ValueNotifier<bool> _signInButtonLoading = ValueNotifier(false);
 
-  // final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _pass = TextEditingController();
-  final ValueNotifier<List<PasswordValidatorCases>>
-      _completedPasswordValidatorCases =
-      ValueNotifier<List<PasswordValidatorCases>>([]);
-
-  final List<PasswordValidatorCases> _passwordValidatorCases = [
-    PasswordValidatorCases.atLeast8Characters,
-    PasswordValidatorCases.atLeastOneNumber,
-    PasswordValidatorCases.atLeastALowerCase,
-    PasswordValidatorCases.atLeastASymbol,
-    PasswordValidatorCases.atLeastAnUppercase,
-  ];
-
-  final ValueNotifier<bool> _shouldShowPasswordValidatorHint =
-      ValueNotifier<bool>(false);
-  final ValueNotifier<bool> _signUpButtonLoading = ValueNotifier(false);
-
-  final _signUpPageformKey = GlobalKey<FormState>();
-
-  void _togglePasswordSufficIcon() {
-    setState(() {
-      _obscureValue = !_obscureValue;
+  void _handleSignIn(AuthenticationCubit bloc) {
+    _signInButtonLoading.value = true;
+    bloc.signInLogic().then((value) {
+      if (value is bool) {
+        _signInButtonLoading.value = false;
+        Future.delayed(
+          const Duration(milliseconds: 2000),
+          () {
+            locator<NavigationService>().goNamed(
+              homeRoute,
+            );
+          },
+        );
+      } else if (value is String) {
+        _signInButtonLoading.value = false;
+        CustomNLAlertDialog.show(context, CustomNLAlertDialogType.error, value);
+      }
     });
   }
 
-  void addToPasswordValidatorCasesList(
-    PasswordValidatorCases passwordValidatorCase,
-  ) {
-    if (!_completedPasswordValidatorCases.value
-        .contains(passwordValidatorCase)) {
-      _completedPasswordValidatorCases.value = List.from(
-        _completedPasswordValidatorCases.value..add(passwordValidatorCase),
-      );
-    }
-  }
-
-  void removeFromPasswordValidatorCasesList(
-    PasswordValidatorCases passwordValidatorCase,
-  ) {
-    if (_completedPasswordValidatorCases.value
-        .contains(passwordValidatorCase)) {
-      _completedPasswordValidatorCases.value = List.from(
-        _completedPasswordValidatorCases.value..remove(passwordValidatorCase),
-      );
-    }
-  }
-
-  void _handleSignUp(AuthenticationCubit bloc) {
-    if (_signUpPageformKey.currentState!.validate()) {
-      bloc.onOtpVerificationSuccessfull = (BuildContext context) {
-        bloc.registerLogic().then((value) {
-          if (value is bool) {
-            locator<NavigationService>().goNamed(
-              setupRoute,
-            );
-          } else if (value is String) {
-            CustomOmAlertDialog.show(
-                context, CustomOmAlertDialogType.error, value);
-
-            locator<NavigationService>().goNamed(
-              registerRoute,
-            );
-          }
-        });
-      };
-      locator<NavigationService>().goNamed(otpVerificationRoute,
-          queryParameters: {"emailAddress": bloc.signUpWorkEmailAddress!});
-    }
-  }
-
-  List<String> reportList = [
-    "Coding",
-    "Music",
-    "Travel",
-    "Food",
-    "Nature",
-    "Reading",
-    "Writing",
-    "Gaming",
-    "Cooking",
-    "Gardening",
-    "Photography",
-    "Crafting",
-    "Dancing",
-    "Collecting",
-    "Sports",
-    "Soccer",
-    "Basketball",
-    "Tennis",
-    "Swimming",
-    "Hiking",
-    "Creative",
-    "Funny",
-    "Adventurous",
-    "Intelligent",
-    "Calm",
-    "Happy",
-    "Sad",
-    "Angry",
-    "Excited",
-    "Surprised",
-    "Strong",
-    "Confident",
-    "Shy",
-    "Curious",
-    "Determined",
-    "Cat",
-    "Dog",
-    "Bird",
-    "Wolf",
-    "Lion",
-    "Forest",
-    "Ocean",
-    "Mountain",
-    "River",
-    "Sky",
-    "Coffee",
-    "Book",
-    "Computer",
-    "Phone",
-    "Car",
-    "Love",
-    "Hope",
-    "Freedom",
-    "Peace",
-    "Chaos",
-    "Red",
-    "Blue",
-    "Green",
-    "Yellow",
-    "Purple",
-    "Buzz",
-    "Click",
-    "Whisper",
-    "Roar",
-    "Hum",
-    "Star",
-    "Moon",
-    "Fire",
-    "Ice",
-    "Dream",
-    "Shadow",
-    "Light",
-    "Storm",
-    "Rain",
-    "Sun",
-    "Earth",
-    "Space",
-    "Time",
-    "Infinity",
-    "Mystery",
-    "Magic",
-    "Power",
-    "Energy",
-    "Spirit",
-    "Soul",
-    "Mind",
-    "Heart",
-    "Life",
-    "Death",
-    "Truth",
-    "Lies",
-    "Fear",
-    "Courage",
-    "Joy",
-    "Sadness",
-    "Anger",
-    "Love",
-    "Hate",
-    "Hope",
-    "Despair"
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<AuthenticationCubit>(context);
+    final coreBloc = BlocProvider.of<AuthenticationCubit>(context);
     return SafeArea(
       child: Scaffold(
           backgroundColor: AppConstants.appPrimaryColor.withOpacity(0.4),
@@ -284,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
           body: Column(
             children: [
               SizedBox(
-                height: 80.0.h,
+                height: 40.0.h,
               ),
               Expanded(
                 child: Column(
@@ -348,17 +163,144 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: 20.0.h,
+              ),
+              ValueListenableBuilder(
+                valueListenable: _selectedNicknamesFromPoolList,
+                builder: (
+                  BuildContext context,
+                  List<String> selectedNicknamesFromPoolList,
+                  Widget? child,
+                ) {
+                  return FutureBuilder(
+                    future: coreBloc.generateNicknameV2Logic(
+                      GenerateNicknameV2Param(
+                        nicknamesFromPool: selectedNicknamesFromPoolList,
+                      ),
+                    ),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return Center(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: coreBloc.generatedNickname ??
+                                      AppConstants.nA,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMedium!
+                                      .copyWith(
+                                        letterSpacing: 0.03.sp,
+                                        fontSize: 23.0,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Shimmer.fromColors(
+                          baseColor: AppConstants.appShimmerBaseColor,
+                          highlightColor: AppConstants.appShimmerHighlightColor,
+                          child: Center(
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: AppConstants.generating,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayMedium!
+                                        .copyWith(
+                                          letterSpacing: 0.03.sp,
+                                          fontSize: 23.0,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                height: 50.0.h,
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
-                    width: AppConstants.getWidth(context),
-                    height: AppConstants.getAppHeight(context) / 2,
-                    child: CustomBridgecardMultipleChoice(
-                      choices: reportList,
-                      onChanged: (value) {
-                        print(value);
-                      },
-                    )),
+                  width: AppConstants.getWidth(context),
+                  height: AppConstants.getAppHeight(context) / 2,
+                  child: FutureBuilder(
+                    future: coreBloc.fetchNicknamesPoolLogic(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (coreBloc.nicknmaesPool != null) {
+                        return CustomBridgecardMultipleChoice(
+                          choices: coreBloc.nicknmaesPool!,
+                          onChanged: (value) {
+                            _selectedNicknamesFromPoolList.value = value;
+                          },
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        return CustomBridgecardMultipleChoice(
+                          choices: coreBloc.nicknmaesPool!,
+                          onChanged: (value) {
+                            _selectedNicknamesFromPoolList.value = value;
+                          },
+                        );
+                      }
+
+                      return Shimmer.fromColors(
+                        baseColor: AppConstants.appShimmerBaseColor,
+                        highlightColor: AppConstants.appShimmerHighlightColor,
+                        child: CustomBridgecardMultipleChoice(
+                          choices: List.generate(100, (_) => "______"),
+                          onChanged: (value) {
+                            _selectedNicknamesFromPoolList.value = value;
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: _signInButtonLoading,
+                builder: (
+                  BuildContext context,
+                  bool signInButtonLoading,
+                  Widget? child,
+                ) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: CustomNLSolidButton(
+                          cColor: AppConstants.appBlack.withOpacity(0.4),
+                          onPressed: () => _handleSignIn(coreBloc),
+                          isLoading: signInButtonLoading,
+                          fontSize: 20.0,
+                          textColor: AppConstants.appBlack,
+                          text: AppConstants.confirmText,
+                          buttonColor: AppConstants.appPrimaryColor,
+                          widthS: ResponsiveWidget.isSmallScreen(context)
+                              ? 90.0.w
+                              : 25.0.w,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           )),

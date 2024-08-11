@@ -60,7 +60,7 @@ class CustomNLSolidButton extends StatelessWidget {
                 ? ButtonLoadingIndicator(
                     color: buttonColor == AppConstants.appWhite
                         ? AppConstants.appPrimaryColor
-                        : null,
+                        : AppConstants.appBlack,
                   )
                 : Text(
                     text!,

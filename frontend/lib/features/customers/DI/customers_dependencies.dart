@@ -18,7 +18,7 @@ void setUpCustomersCoreDependencies() {
   locator.registerLazySingleton<CustomersDataSource>(
     () => CustomersDataSourceImpl(
       locator(),
-      OmConfig.config.baseApiUrl!,
+      NLConfig.config.baseApiUrl!,
     ),
   );
 }

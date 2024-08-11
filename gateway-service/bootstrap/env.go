@@ -10,6 +10,7 @@ type Env struct {
 	AppEnv           string `mapstructure:"ENVIRONMENT"`
 	AppServerUrl     string `mapstructure:"SERVER_URL"`
 	BackendServerUrl string `mapstructure:"BACKEND_SERVER_URL"`
+	LlmServerUrl     string `mapstructure:"LLM_SERVER_URL"`
 }
 
 func NewEnv() *Env {

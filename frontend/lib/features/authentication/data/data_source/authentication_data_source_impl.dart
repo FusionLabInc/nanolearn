@@ -5,17 +5,18 @@ import 'package:frontend/core/index.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_session_jwt/flutter_session_jwt.dart';
+import 'package:frontend/pb/llm.pb.dart';
+import 'package:grpc/grpc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AuthenticationDataSourceImpl implements AuthenticationDataSource {
   AuthenticationDataSourceImpl(
     this._apiClient,
+    this._grpcClient,
     this._baseApiUrl,
   );
 
-  static const _signInPath = '/v1/auth/login';
-
-  static const _registerPath = '/v1/superadmin/register';
+  static const _signInPath = '/backend/login';
 
   static const _verifyEmailUrl = '/v1/user/email/verify';
 
@@ -25,7 +26,10 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
 
   static const _fetchNicknamesPoolPath = '/backend/nicknames/pool';
 
-  final OmApiClient _apiClient;
+  static const _generateNicknamesPath = '/llm/nickname/generate';
+
+  final NLApiClient _apiClient;
+  final NLGrpcClient _grpcClient;
   final String _baseApiUrl;
   final AuthProviderUserUserMapper _authProviderUserUserMapper =
       AuthProviderUserUserMapper();
@@ -40,35 +44,6 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
       return Future.value(
           optionOf(_authProviderUserUserMapper.toDomain(payload)));
     }
-  }
-
-  @override
-  Future<Option<Unit>> register(
-    RegisterParam params,
-  ) async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final mobileVersion = packageInfo.version;
-    const deviceType = kIsWeb ? "web" : "N/A";
-
-    final updatedParams = params.copyWith(
-      deviceType: deviceType,
-      mobileVersion: mobileVersion,
-    );
-
-    final response = await _apiClient.post(
-      '$_baseApiUrl$_registerPath',
-      data: updatedParams.toJson(),
-    );
-
-    if (response.statusCode != 201) {
-      return none();
-    }
-
-    final accessToken = response.data["data"]["access_token"];
-
-    await FlutterSessionJwt.saveToken(accessToken);
-
-    return some(unit);
   }
 
   @override
@@ -148,6 +123,33 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
     );
 
     return FetchNicknamesPoolResponse.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  ResponseStream<GenerateNicknameResponse> generateNickname(
+    GenerateNicknameParam params,
+  ) {
+    final ResponseStream<GenerateNicknameResponse>
+        generateNicknameResponseStream =
+        _grpcClient.nlLlmServiceClient().generateNickname(
+              params.generatedNicknameRequestStreamController.stream,
+            );
+
+    return generateNicknameResponseStream;
+  }
+
+  @override
+  Future<GenerateNicknameV2Response> generateNicknameV2(
+    GenerateNicknameV2Param params,
+  ) async {
+    final response = await _apiClient.post(
+      '$_baseApiUrl$_generateNicknamesPath',
+      data: params.toJson(),
+    );
+
+    return GenerateNicknameV2Response.fromJson(
       response.data as Map<String, dynamic>,
     );
   }

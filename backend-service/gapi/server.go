@@ -6,23 +6,23 @@ import (
 	"time"
 
 	"github.com/FusionLabInc/nanolearn/backend-service/bootstrap"
-	"github.com/FusionLabInc/nanolearn/backend-service/domain"
 	"github.com/FusionLabInc/nanolearn/backend-service/pb"
+	"github.com/FusionLabInc/nanolearn/backend-service/repository"
 	"github.com/FusionLabInc/nanolearn/backend-service/utils/token"
 )
 
 type Server struct {
 	pb.UnimplementedBackendServiceServer
-	Db         bootstrap.Database
+	Db         *bootstrap.Database
 	TokenMaker token.Maker
 	Env        *bootstrap.Env
 	Timeout    time.Duration
-	Repository domain.Repository
+	Repository repository.Repository
 }
 
 // NewServer creates a new gRPC server
-func NewServer(env *bootstrap.Env, db bootstrap.Database, r domain.Repository, timeout time.Duration) (*Server, error) {
-	tokenMaker, err := token.NewPasetoMaker(env.TokenSymmetricKey)
+func NewServer(env *bootstrap.Env, db *bootstrap.Database, r repository.Repository, timeout time.Duration) (*Server, error) {
+	tokenMaker, err := token.NewJWTMaker(env.TokenSymmetricKey)
 
 	if err != nil {
 		log.Fatal("Cannot create token maker: ", err)

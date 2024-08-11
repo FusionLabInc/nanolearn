@@ -3,8 +3,8 @@ import 'package:frontend/core/api/index.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class OmApiClient {
-  OmApiClient(this._apiConfig);
+class NLApiClient {
+  NLApiClient(this._apiConfig);
 
   final NanolearnApiConfig _apiConfig;
 

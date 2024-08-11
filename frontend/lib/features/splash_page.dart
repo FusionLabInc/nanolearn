@@ -43,6 +43,7 @@ class _SplashPageState extends State<SplashPage> {
       builder: (context, state) {
         // final double appWidth = MediaQuery.of(context).size.width;
         // final double appHeight = MediaQuery.of(context).size.width;
+
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.only(

@@ -1,13 +1,9 @@
 import 'package:frontend/features/authentication/presentation/index.dart';
 import 'package:frontend/utils/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wc_form_validators/wc_form_validators.dart';
 import 'package:frontend/core/index.dart';
-
-import 'dart:math' as math;
 
 class SetupPage extends StatefulWidget {
   const SetupPage({super.key});
@@ -17,51 +13,6 @@ class SetupPage extends StatefulWidget {
 }
 
 class _SetupPageState extends State<SetupPage> {
-  bool _obscureValue = true;
-
-  final FocusNode _emailFocus = FocusNode();
-  final FocusNode _passwordFocus = FocusNode();
-
-  final GlobalKey<FormState> passwordValidatorKey = GlobalKey();
-
-  final ValueNotifier<bool> _signInButtonLoading = ValueNotifier(false);
-
-  final _setupPageformKey = GlobalKey<FormState>();
-
-  void _togglePasswordSufficIcon() {
-    setState(() {
-      _obscureValue = !_obscureValue;
-    });
-  }
-
-  void _handleSignIn(AuthenticationCubit bloc) {
-    if (_setupPageformKey.currentState!.validate()) {
-      bloc.onOtpVerificationSuccessfull = (BuildContext context) {
-        bloc.signInLogic().then((value) {
-          if (value is bool) {
-            Future.delayed(
-              const Duration(milliseconds: 2000),
-              () {
-                locator<NavigationService>().goNamed(
-                  homeRoute,
-                );
-              },
-            );
-          } else if (value is String) {
-            CustomOmAlertDialog.show(
-                context, CustomOmAlertDialogType.error, value);
-
-            locator<NavigationService>().goNamed(
-              setupRoute,
-            );
-          }
-        });
-      };
-      locator<NavigationService>().goNamed(otpVerificationRoute,
-          queryParameters: {"emailAddress": bloc.signInEmail!});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<AuthenticationCubit>(context);

@@ -34,7 +34,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     /// Automatically call the api to send otp once you get routed to this page
     bloc.sendOtpLogic(widget.emailAddress).then((value) {
       if (!value) {
-        CustomOmAlertDialog.show(context, CustomOmAlertDialogType.error,
+        CustomNLAlertDialog.show(context, CustomNLAlertDialogType.error,
             AppConstants.unableToSendOtpErrorMessage);
       }
     });
@@ -166,9 +166,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                                             if (value.hasError!) {
                                               _confirmOtpButtonLoading.value =
                                                   false;
-                                              CustomOmAlertDialog.show(
+                                              CustomNLAlertDialog.show(
                                                 context,
-                                                CustomOmAlertDialogType.error,
+                                                CustomNLAlertDialogType.error,
                                                 value.message!,
                                               );
                                             } else {
@@ -201,15 +201,15 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                                           .sendOtpLogic(widget.emailAddress)
                                           .then((value) {
                                         if (!value) {
-                                          CustomOmAlertDialog.show(
+                                          CustomNLAlertDialog.show(
                                               context,
-                                              CustomOmAlertDialogType.error,
+                                              CustomNLAlertDialogType.error,
                                               AppConstants
                                                   .unableToSendOtpErrorMessage);
                                         } else {
-                                          CustomOmAlertDialog.show(
+                                          CustomNLAlertDialog.show(
                                             context,
-                                            CustomOmAlertDialogType.info,
+                                            CustomNLAlertDialogType.info,
                                             AppConstants
                                                 .otpSentSuccessfullyMessage,
                                           );

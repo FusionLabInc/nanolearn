@@ -23,15 +23,15 @@ func main() {
 
 	g := gin.Default()
 
-	route.Setup(env, timeout, g)
-
 	// gin.SetMode(gin.ReleaseMode)
 
 	g.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{"PUT", "PATCH", "GET", "POST", "OPTIONS"},
-		AllowHeaders: []string{"Origin, X-Requested-With, Content-Type, Accept"},
+		AllowHeaders: []string{"Origin, X-Requested-With, Content-Type, Accept", "token"},
 	}))
+
+	route.Setup(env, timeout, g)
 
 	g.Run(env.AppServerUrl)
 

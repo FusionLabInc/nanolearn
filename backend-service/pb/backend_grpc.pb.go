@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	BackendService_FetchSetupNicknamePool_FullMethodName = "/backend.BackendService/FetchSetupNicknamePool"
-	BackendService_CreateNickname_FullMethodName         = "/backend.BackendService/CreateNickname"
+	BackendService_Login_FullMethodName                  = "/backend.BackendService/Login"
 	BackendService_ValidateToken_FullMethodName          = "/backend.BackendService/ValidateToken"
 	BackendService_RenewToken_FullMethodName             = "/backend.BackendService/RenewToken"
 )
@@ -30,7 +30,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BackendServiceClient interface {
 	FetchSetupNicknamePool(ctx context.Context, in *FetchSetupNicknamePoolRequest, opts ...grpc.CallOption) (*FetchSetupNicknamePoolResponse, error)
-	CreateNickname(ctx context.Context, in *CreateNicknameRequest, opts ...grpc.CallOption) (*CreateNicknameResponse, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error)
 	RenewToken(ctx context.Context, in *RenewTokenRequest, opts ...grpc.CallOption) (*RenewTokenResponse, error)
 }
@@ -53,10 +53,10 @@ func (c *backendServiceClient) FetchSetupNicknamePool(ctx context.Context, in *F
 	return out, nil
 }
 
-func (c *backendServiceClient) CreateNickname(ctx context.Context, in *CreateNicknameRequest, opts ...grpc.CallOption) (*CreateNicknameResponse, error) {
+func (c *backendServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateNicknameResponse)
-	err := c.cc.Invoke(ctx, BackendService_CreateNickname_FullMethodName, in, out, cOpts...)
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, BackendService_Login_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (c *backendServiceClient) RenewToken(ctx context.Context, in *RenewTokenReq
 // for forward compatibility.
 type BackendServiceServer interface {
 	FetchSetupNicknamePool(context.Context, *FetchSetupNicknamePoolRequest) (*FetchSetupNicknamePoolResponse, error)
-	CreateNickname(context.Context, *CreateNicknameRequest) (*CreateNicknameResponse, error)
+	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	ValidateToken(context.Context, *ValidateTokenRequest) (*ValidateTokenResponse, error)
 	RenewToken(context.Context, *RenewTokenRequest) (*RenewTokenResponse, error)
 	mustEmbedUnimplementedBackendServiceServer()
@@ -104,8 +104,8 @@ type UnimplementedBackendServiceServer struct{}
 func (UnimplementedBackendServiceServer) FetchSetupNicknamePool(context.Context, *FetchSetupNicknamePoolRequest) (*FetchSetupNicknamePoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchSetupNicknamePool not implemented")
 }
-func (UnimplementedBackendServiceServer) CreateNickname(context.Context, *CreateNicknameRequest) (*CreateNicknameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateNickname not implemented")
+func (UnimplementedBackendServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedBackendServiceServer) ValidateToken(context.Context, *ValidateTokenRequest) (*ValidateTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateToken not implemented")
@@ -152,20 +152,20 @@ func _BackendService_FetchSetupNicknamePool_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BackendService_CreateNickname_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateNicknameRequest)
+func _BackendService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BackendServiceServer).CreateNickname(ctx, in)
+		return srv.(BackendServiceServer).Login(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: BackendService_CreateNickname_FullMethodName,
+		FullMethod: BackendService_Login_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BackendServiceServer).CreateNickname(ctx, req.(*CreateNicknameRequest))
+		return srv.(BackendServiceServer).Login(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -218,8 +218,8 @@ var BackendService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BackendService_FetchSetupNicknamePool_Handler,
 		},
 		{
-			MethodName: "CreateNickname",
-			Handler:    _BackendService_CreateNickname_Handler,
+			MethodName: "Login",
+			Handler:    _BackendService_Login_Handler,
 		},
 		{
 			MethodName: "ValidateToken",

@@ -165,6 +165,8 @@ class AppConstants {
   static const otpSentSuccessfullyMessage = "Otp sent successfully";
 
   static const nA = "N/A";
+
+  static const generating = "generating....";
 }
 
 enum PasswordValidatorCases {

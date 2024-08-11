@@ -2,6 +2,7 @@
 class AppConfig {
   /// The backend endpoint base api url.
   final String? baseApiUrl;
+  final String? llmServerUrl;
 
   //* dsn from sentry
   final String? sentryDsn;
@@ -9,6 +10,7 @@ class AppConfig {
 
   const AppConfig({
     this.baseApiUrl,
+    this.llmServerUrl,
     this.sentryDsn,
     this.sentryTracesSampleRate,
   });

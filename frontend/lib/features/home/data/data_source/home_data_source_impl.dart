@@ -5,7 +5,7 @@ import 'package:frontend/features/home/data/data_source/home_data_source.dart';
 import 'package:frontend/features/home/data/index.dart';
 
 class HomeDataSourceImpl implements HomeDataSource {
-  final OmApiClient _apiClient;
+  final NLApiClient _apiClient;
   final String _baseApiUrl;
 
   HomeDataSourceImpl(

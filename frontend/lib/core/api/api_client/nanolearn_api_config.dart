@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 
 class NanolearnApiConfig {
   NanolearnApiConfig(
-    this.baseUrl, {
+    this.baseUrl,
+    this.llmServerUrl, {
     this.bearerToken,
     Options? options,
     Duration? connectTimeout,
@@ -29,6 +30,7 @@ class NanolearnApiConfig {
   Duration get sendTimeout => _sendTimeout;
 
   final String baseUrl;
+  final String llmServerUrl;
   final Options _options;
 
   final Duration _connectTimeout;

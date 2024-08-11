@@ -167,6 +167,8 @@ class AppConstants {
   static const nA = "N/A";
 
   static const generating = "generating....";
+
+  static const appTagLineText = "#JustNanoIt";
 }
 
 enum PasswordValidatorCases {

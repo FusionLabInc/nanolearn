@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
               authBloc.sendOnAppStartLazyEvent();
             },
           );
-          locator<NavigationService>().goNamed(overviewRoute);
+          locator<NavigationService>().goNamed(dashboardRoute);
         } else {
           locator<NavigationService>().goNamed(setupRoute);
         }

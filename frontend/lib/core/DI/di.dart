@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../features/authentication/DI/index.dart';
 import '../../features/overview/DI/index.dart';
-import '../../features/customers/DI/index.dart';
 
 final GetIt locator = GetIt.I;
 
@@ -41,5 +40,4 @@ void setUpAppLocator() {
   setUpAuthenticationDependencies();
   setUpCoreCoreDependencies();
   setUpOverviewCoreDependencies();
-  setUpCustomersCoreDependencies();
 }

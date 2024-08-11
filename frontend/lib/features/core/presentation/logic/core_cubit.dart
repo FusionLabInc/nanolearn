@@ -10,14 +10,14 @@ part 'core_state.dart';
 class CoreCubit extends Cubit<CoreState>
     implements OnAppStartLazy, OnAppStartPriority, OnAppLogout {
   UploadImageToFirebaseStorage uploadImageToFirebaseStorage;
-  GetSuperadminDetails getSuperadminDetails;
+  GetUserDetails getUserDetails;
 
   CoreCubit(
     this.uploadImageToFirebaseStorage,
-    this.getSuperadminDetails,
+    this.getUserDetails,
   ) : super(CoreInitial());
 
-  String? superadminEmail;
+  String? username;
   String? superadminCompanyName;
 
   Future<bool> uploadImageToFirebaseStorageLogic(
@@ -36,14 +36,13 @@ class CoreCubit extends Cubit<CoreState>
     );
   }
 
-  Future getSuperadminDetailsLogic() async {
+  Future getUserDetailsLogic() async {
     emit(CoreLoading());
     final _ = NoParams();
-    final response = await getSuperadminDetails(_);
+    final response = await getUserDetails(_);
     return response.maybeWhen(
       success: (data) async {
-        superadminEmail = data.email;
-        superadminCompanyName = data.companyName;
+        username = data.username;
         emit(CoreLoaded(data: data));
         return data;
       },
@@ -60,7 +59,7 @@ class CoreCubit extends Cubit<CoreState>
 
   @override
   Future<void> onAppStartPriority() async {
-    await getSuperadminDetailsLogic();
+    await getUserDetailsLogic();
   }
 
   @override

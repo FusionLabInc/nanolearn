@@ -57,9 +57,24 @@ message RenewTokenResponse {
 }
 
 
+
+// Get User Details
+
+message GetUserDetailsRequest { string user_id = 1; }
+
+message GetUserDetailsResponse {
+  int64 code = 1;
+  string message = 2;
+  string user_id = 3;
+  int64 created_at = 4;
+  string username = 5;
+}
+
+
 service BackendService {
   rpc FetchSetupNicknamePool(FetchSetupNicknamePoolRequest) returns (FetchSetupNicknamePoolResponse) {}
   rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
   rpc RenewToken(RenewTokenRequest) returns (RenewTokenResponse) {}
+  rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse) {}
 }

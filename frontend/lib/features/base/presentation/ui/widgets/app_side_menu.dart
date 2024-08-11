@@ -90,6 +90,6 @@ class _AppSideMenuState extends State<AppSideMenu> {
 }
 
 List<AppSideMenuItemData> appSideMenuItemRoutes = [
-  AppSideMenuItemData(AppConstants.overviewPageDisplayName, overviewRoute),
+  AppSideMenuItemData(AppConstants.overviewPageDisplayName, dashboardRoute),
   AppSideMenuItemData(AppConstants.customersPageDisplayName, customersRoute),
 ];

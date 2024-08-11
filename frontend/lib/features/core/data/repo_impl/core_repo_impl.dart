@@ -19,7 +19,7 @@ class CoreRepoImpl extends CoreRepo {
   }
 
   @override
-  Future<ApiResult<SuperadminDetails>> getSuperadminDetails() {
-    return apiInterceptor(_coreDataSource.getSuperadminDetails());
+  Future<ApiResult<UserDetails>> getUserDetails() {
+    return apiInterceptor(_coreDataSource.getUserDetails());
   }
 }

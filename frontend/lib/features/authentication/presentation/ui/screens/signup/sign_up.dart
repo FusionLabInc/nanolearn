@@ -85,7 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ],
                   ),
                   Text(
-                    "#JustNanoIt",
+                    AppConstants.appTagLineText,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.w400,
                           color: Colors.black,

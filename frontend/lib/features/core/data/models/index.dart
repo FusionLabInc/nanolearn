@@ -1,1 +1,1 @@
-export 'superadmin_details.dart';
+export 'user_details.dart';

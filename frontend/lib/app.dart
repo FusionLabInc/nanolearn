@@ -1,5 +1,4 @@
 import 'package:frontend/core/index.dart';
-import 'package:frontend/features/customers/index.dart';
 import 'package:frontend/features/overview/index.dart';
 import 'package:frontend/utils/index.dart';
 import 'package:flashy_flushbar/flashy_flushbar.dart';
@@ -28,7 +27,6 @@ class _AppState extends State<App> {
   late final AuthenticationCubit _authenticationCubit;
   late final OverviewCubit _overviewCubit;
   late final CoreCubit _coreCubit;
-  late final CustomersCubit _customersCubit;
 
   @override
   void initState() {
@@ -61,13 +59,8 @@ class _AppState extends State<App> {
       locator(),
     );
 
-    _customersCubit = CustomersCubit(
-      locator(),
-    );
-
     _authenticationCubit.registerAuthListeners([
       _coreCubit,
-      _customersCubit,
     ]);
   }
 
@@ -103,9 +96,6 @@ class _AppState extends State<App> {
             ),
             BlocProvider(
               create: (_) => _overviewCubit,
-            ),
-            BlocProvider(
-              create: (_) => _customersCubit,
             ),
           ],
           child: CustomDismissKeyboardWidget(

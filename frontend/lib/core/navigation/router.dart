@@ -1,11 +1,8 @@
 import 'package:frontend/core/index.dart';
 import 'package:frontend/features/authentication/presentation/index.dart';
-import 'package:frontend/features/base/presentation/ui/screens/app_base.dart';
 import 'package:frontend/features/billing/index.dart';
-import 'package:frontend/features/customers/index.dart';
 import 'package:frontend/features/overview/presentation/ui/screens/overview.dart';
 import 'package:frontend/features/splash_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'om_custom_page_routes.dart';
@@ -51,46 +48,15 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/otp-verification',
-      name: otpVerificationRoute,
+      path: '/dashboard',
+      name: dashboardRoute,
       pageBuilder: (context, state) {
-        final emailAddress = state.uri.queryParameters["emailAddress"] ?? "";
-        final bloc = BlocProvider.of<AuthenticationCubit>(context);
         return NLCustomPageRoutes.ltrSlideTransition(
-          child: OtpVerificationPage(
-            emailAddress: emailAddress,
-            onOtpVerificationSuccessfull: bloc.onOtpVerificationSuccessfull,
-          ),
+          child: const Overview(),
         );
       },
     ),
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        // Return the widget that implements the custom shell (e.g a BottomNavigationBar).
-        // The [StatefulNavigationShell] is passed to be able to navigate to other branches in a stateful way.
-        return AppBase(appBaseNavigationShell: navigationShell);
-      },
-      branches: [
-        StatefulShellBranch(
-            navigatorKey: locator<NavigationService>().appBaseNavigatorKey,
-            routes: <RouteBase>[
-              GoRoute(
-                name: overviewRoute,
-                path: '/dashboard/overview',
-                builder: (context, state) => const Overview(),
-              ),
-            ]),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              name: customersRoute,
-              path: '/dashboard/customers',
-              builder: (context, state) => const Customers(),
-            ),
-          ],
-        ),
-      ],
-    ),
+
     // GoRoute(
     //   path: '/onboarding',
     //   name: onboardingRoute,

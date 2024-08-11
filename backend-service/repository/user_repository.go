@@ -55,8 +55,6 @@ func (ur *userRepository) Get(c context.Context, userID string) *domain.User {
 		return nil
 	}
 
-	fmt.Println(user)
-
 	return user
 }
 
@@ -69,7 +67,15 @@ func (ur *userRepository) Add(c context.Context, userID string, data domain.User
 		return true
 	}
 
-	_, newErr := ur.clientColRef.Doc(userID).Set(c, data)
+	userMap := make(map[string]interface{})
+
+	userMap["created_at"] = data.CreatedAt
+
+	userMap["id"] = data.ID
+
+	userMap["username"] = data.Username
+
+	_, newErr := ur.clientColRef.Doc(userID).Set(c, userMap)
 
 	if newErr != nil {
 		fmt.Printf("error adding user: %v", newErr)

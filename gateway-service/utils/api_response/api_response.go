@@ -132,7 +132,7 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 
 		}
 
-	case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
 		rr := r
 
@@ -144,8 +144,11 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 				"status":  "success",
 				"message": rr.Message,
 				"data": gin.H{
-					"access_token":            rr.AccessToken,
-					"access_token_expires_at": rr.AccessTokenExpiresAt,
+					"user": gin.H{
+						"user_id":    rr.UserId,
+						"created_at": rr.CreatedAt,
+						"username":   rr.Username,
+					},
 				},
 			})
 

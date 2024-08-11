@@ -33,43 +33,28 @@ class _CustomAppBarState extends State<CustomAppBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          !ResponsiveWidget.isSmallScreen(context)
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      height: 50.0.h,
-                      child: Image.asset(
-                        AppConstants.appLogoImagePath,
-                      ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 0.5.w,
+              ),
+              Text(
+                AppConstants.appName,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      letterSpacing: 0.03.sp,
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(
-                      width: 0.5.w,
-                    ),
-                    Text(
-                      AppConstants.appName,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      style:
-                          Theme.of(context).textTheme.displayMedium!.copyWith(
-                                letterSpacing: 0.03.sp,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                    )
-                  ],
-                )
-              : IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    widget.appBaseScaffoldKey.currentState?.openDrawer();
-                  },
-                ),
+              )
+            ],
+          ),
           FutureBuilder(
-            future: coreBloc.getSuperadminDetailsLogic(),
+            future: coreBloc.getUserDetailsLogic(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (coreBloc.superadminCompanyName != null &&
-                  coreBloc.superadminEmail != null) {
+              if (coreBloc.username != null) {
                 return Row(
                   children: [
                     Container(
@@ -101,16 +86,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          coreBloc.superadminCompanyName ?? AppConstants.nA,
+                          coreBloc.username ?? AppConstants.nA,
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w700,
                                     color: AppConstants.appBlack,
                                     fontSize: 4.0.sp,
                                   ),
                         ),
                         Text(
-                          coreBloc.superadminEmail ?? AppConstants.nA,
+                          AppConstants.appTagLineText,
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     fontWeight: FontWeight.w400,
@@ -155,16 +140,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          coreBloc.superadminCompanyName ?? AppConstants.nA,
+                          coreBloc.username ?? AppConstants.nA,
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w700,
                                     color: AppConstants.appBlack,
                                     fontSize: 4.0.sp,
                                   ),
                         ),
                         Text(
-                          coreBloc.superadminEmail ?? AppConstants.nA,
+                          AppConstants.appTagLineText,
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     fontWeight: FontWeight.w400,

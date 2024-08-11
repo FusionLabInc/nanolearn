@@ -8,5 +8,5 @@ abstract class CoreRepo {
   Future<ApiResult<Option<String>>> uploadImageToFirebaseStorage(
     UploadImageParam params,
   );
-  Future<ApiResult<SuperadminDetails>> getSuperadminDetails();
+  Future<ApiResult<UserDetails>> getUserDetails();
 }

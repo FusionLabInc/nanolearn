@@ -6,8 +6,8 @@ import 'package:frontend/features/core/domain/index.dart';
 void setUpCoreCoreDependencies() {
   // Register usecases dependencies.
 
-  locator.registerLazySingleton<GetSuperadminDetails>(
-    () => GetSuperadminDetails(locator()),
+  locator.registerLazySingleton<GetUserDetails>(
+    () => GetUserDetails(locator()),
   );
 
   locator.registerLazySingleton<UploadImageToFirebaseStorage>(

@@ -6,7 +6,7 @@ import 'package:frontend/features/core/domain/index.dart';
 import 'package:dartz/dartz.dart';
 
 class CoreDataSourceImpl implements CoreDataSource {
-  final _getSuperadminDetails = '/v1/superadmin/';
+  final _getUserDetails = '/backend/user';
 
   // ignore: unused_field
   final NLApiClient _apiClient;
@@ -26,15 +26,15 @@ class CoreDataSourceImpl implements CoreDataSource {
   }
 
   @override
-  Future<SuperadminDetails> getSuperadminDetails() async {
+  Future<UserDetails> getUserDetails() async {
     final response = await _apiClient.get(
-      '$_baseApiUrl$_getSuperadminDetails',
+      '$_baseApiUrl$_getUserDetails',
     );
 
     final data = response.data;
 
-    final superadminDetails = SuperadminDetails.fromJson(
-        data["data"]["superadmin"] as Map<String, dynamic>);
-    return superadminDetails;
+    final userDetails =
+        UserDetails.fromJson(data["data"]["user"] as Map<String, dynamic>);
+    return userDetails;
   }
 }

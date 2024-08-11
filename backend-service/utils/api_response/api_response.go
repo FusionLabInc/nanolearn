@@ -37,22 +37,23 @@ func Success(response interface{}, message string, args map[string]interface{}) 
 		rr.UserId = args["user_id"].(string)
 		return rr
 
-	// case *pb.ValidateResponse:
+	case *pb.ValidateTokenResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.OK)
-	// 	rr.Message = message
-	// 	rr.UserId = args["user_id"].(string)
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.OK)
+		rr.Message = message
+		rr.UserId = args["user_id"].(string)
+		return rr
 
-	// case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.OK)
-	// 	rr.Message = message
-	// 	rr.AccessToken = args["access_token"].(string)
-	// 	rr.AccessTokenExpiresAt = args["access_token_expires_at"].(int64)
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.OK)
+		rr.Message = message
+		rr.UserId = args["user_id"].(string)
+		rr.CreatedAt = args["created_at"].(int64)
+		rr.Username = args["username"].(string)
+		return rr
 
 	default:
 
@@ -72,26 +73,26 @@ func ErrorInternal(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.LoginResponse:
+	case *pb.LoginResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.Internal)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.Internal)
+		rr.Message = message
+		return rr
 
-	// case *pb.ValidateResponse:
+	case *pb.ValidateTokenResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.Internal)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.Internal)
+		rr.Message = message
+		return rr
 
-	// case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.Internal)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.Internal)
+		rr.Message = message
+		return rr
 
 	default:
 
@@ -118,19 +119,19 @@ func ErrorBadRequest(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.ValidateResponse:
+	case *pb.ValidateTokenResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.InvalidArgument)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.InvalidArgument)
+		rr.Message = message
+		return rr
 
-	// case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.InvalidArgument)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.InvalidArgument)
+		rr.Message = message
+		return rr
 
 	default:
 
@@ -157,19 +158,19 @@ func ErrorNotFound(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.ValidateResponse:
+	case *pb.ValidateTokenResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.NotFound)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.NotFound)
+		rr.Message = message
+		return rr
 
-	// case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.NotFound)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.NotFound)
+		rr.Message = message
+		return rr
 
 	default:
 
@@ -196,19 +197,19 @@ func ErrorAlreadyExists(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.ValidateResponse:
+	case *pb.ValidateTokenResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.AlreadyExists)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.AlreadyExists)
+		rr.Message = message
+		return rr
 
-	// case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.AlreadyExists)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.AlreadyExists)
+		rr.Message = message
+		return rr
 
 	default:
 
@@ -235,19 +236,19 @@ func ErrorUnauthorized(response interface{}, message string) interface{} {
 		rr.Message = message
 		return rr
 
-	// case *pb.ValidateResponse:
+	case *pb.ValidateTokenResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.PermissionDenied)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.PermissionDenied)
+		rr.Message = message
+		return rr
 
-	// case *pb.RenewTokenResponse:
+	case *pb.GetUserDetailsResponse:
 
-	// 	rr := r
-	// 	rr.Code = int64(codes.PermissionDenied)
-	// 	rr.Message = message
-	// 	return rr
+		rr := r
+		rr.Code = int64(codes.PermissionDenied)
+		rr.Message = message
+		return rr
 
 	default:
 

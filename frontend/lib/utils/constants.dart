@@ -166,6 +166,8 @@ class AppConstants {
 
   static const nA = "N/A";
 
+  static const nanoANewContentText = "Click to `Nano` a new content";
+
   static const generating = "generating....";
 
   static const appTagLineText = "#JustNanoIt";

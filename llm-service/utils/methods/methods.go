@@ -33,3 +33,11 @@ func DecodeBase64ToBytes(base64String string) ([]byte, error) {
 	return base64Bytes, nil
 
 }
+
+func Base64Encode(inputString string) string {
+	// Convert base64 string to bytes
+	encoded := base64.StdEncoding.EncodeToString([]byte(inputString))
+
+	return encoded
+
+}

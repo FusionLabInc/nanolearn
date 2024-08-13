@@ -3,9 +3,8 @@ package gapi
 import (
 	"context"
 
-	"github.com/FusionLabInc/nanolearn/backend-service/utils/api_response"
-
 	"github.com/FusionLabInc/nanolearn/backend-service/pb"
+	"github.com/FusionLabInc/nanolearn/backend-service/utils/api_response"
 )
 
 func (s *Server) FetchSetupNicknamePool(ctx context.Context, req *pb.FetchSetupNicknamePoolRequest) (*pb.FetchSetupNicknamePoolResponse, error) {

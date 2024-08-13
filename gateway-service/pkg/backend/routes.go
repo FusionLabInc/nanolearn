@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(r *gin.Engine, env *bootstrap.Env) *ServiceClient {
+func RegisterRoutes(r *gin.Engine, env *bootstrap.Env) AuthMiddlewareConfig {
 
 	svc := &ServiceClient{
 		Client: InitServiceClient(env),
@@ -21,8 +21,11 @@ func RegisterRoutes(r *gin.Engine, env *bootstrap.Env) *ServiceClient {
 	userRoutes := r.Group("/backend/user")
 	userRoutes.Use(a.AuthRequired)
 	userRoutes.GET("", svc.GetUserDetails)
+	userRoutes.POST("/upload", svc.UploadAndNanoContent)
+	userRoutes.GET("/summary/:id", svc.GetContentSummaries)
+	userRoutes.GET("/glossary/:id", svc.GetContentGlossary)
 
-	return svc
+	return a
 }
 
 func (svc *ServiceClient) FetchSetupNicknamePool(ctx *gin.Context) {
@@ -35,4 +38,16 @@ func (svc *ServiceClient) Login(ctx *gin.Context) {
 
 func (svc *ServiceClient) GetUserDetails(ctx *gin.Context) {
 	routes.GetUserDetails(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) UploadAndNanoContent(ctx *gin.Context) {
+	routes.UploadAndNanoContent(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) GetContentSummaries(ctx *gin.Context) {
+	routes.GetContentSummaries(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) GetContentGlossary(ctx *gin.Context) {
+	routes.GetContentGlossary(ctx, svc.Client)
 }

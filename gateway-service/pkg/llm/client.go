@@ -1,4 +1,4 @@
-package auth
+package llm
 
 import (
 	"fmt"

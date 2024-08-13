@@ -24,6 +24,9 @@ const (
 	BackendService_ValidateToken_FullMethodName          = "/backend.BackendService/ValidateToken"
 	BackendService_RenewToken_FullMethodName             = "/backend.BackendService/RenewToken"
 	BackendService_GetUserDetails_FullMethodName         = "/backend.BackendService/GetUserDetails"
+	BackendService_UploadFile_FullMethodName             = "/backend.BackendService/UploadFile"
+	BackendService_GetContentGlossary_FullMethodName     = "/backend.BackendService/GetContentGlossary"
+	BackendService_GetContentSummaries_FullMethodName    = "/backend.BackendService/GetContentSummaries"
 )
 
 // BackendServiceClient is the client API for BackendService service.
@@ -35,6 +38,9 @@ type BackendServiceClient interface {
 	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error)
 	RenewToken(ctx context.Context, in *RenewTokenRequest, opts ...grpc.CallOption) (*RenewTokenResponse, error)
 	GetUserDetails(ctx context.Context, in *GetUserDetailsRequest, opts ...grpc.CallOption) (*GetUserDetailsResponse, error)
+	UploadFile(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[FileUploadRequest, FileUploadResponse], error)
+	GetContentGlossary(ctx context.Context, in *GetContentGlossaryRequest, opts ...grpc.CallOption) (*GetContentGlossaryResponse, error)
+	GetContentSummaries(ctx context.Context, in *GetContentSummariesRequest, opts ...grpc.CallOption) (*GetContentSummariesResponse, error)
 }
 
 type backendServiceClient struct {
@@ -95,6 +101,39 @@ func (c *backendServiceClient) GetUserDetails(ctx context.Context, in *GetUserDe
 	return out, nil
 }
 
+func (c *backendServiceClient) UploadFile(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[FileUploadRequest, FileUploadResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &BackendService_ServiceDesc.Streams[0], BackendService_UploadFile_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[FileUploadRequest, FileUploadResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type BackendService_UploadFileClient = grpc.ClientStreamingClient[FileUploadRequest, FileUploadResponse]
+
+func (c *backendServiceClient) GetContentGlossary(ctx context.Context, in *GetContentGlossaryRequest, opts ...grpc.CallOption) (*GetContentGlossaryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetContentGlossaryResponse)
+	err := c.cc.Invoke(ctx, BackendService_GetContentGlossary_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *backendServiceClient) GetContentSummaries(ctx context.Context, in *GetContentSummariesRequest, opts ...grpc.CallOption) (*GetContentSummariesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetContentSummariesResponse)
+	err := c.cc.Invoke(ctx, BackendService_GetContentSummaries_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BackendServiceServer is the server API for BackendService service.
 // All implementations must embed UnimplementedBackendServiceServer
 // for forward compatibility.
@@ -104,6 +143,9 @@ type BackendServiceServer interface {
 	ValidateToken(context.Context, *ValidateTokenRequest) (*ValidateTokenResponse, error)
 	RenewToken(context.Context, *RenewTokenRequest) (*RenewTokenResponse, error)
 	GetUserDetails(context.Context, *GetUserDetailsRequest) (*GetUserDetailsResponse, error)
+	UploadFile(grpc.ClientStreamingServer[FileUploadRequest, FileUploadResponse]) error
+	GetContentGlossary(context.Context, *GetContentGlossaryRequest) (*GetContentGlossaryResponse, error)
+	GetContentSummaries(context.Context, *GetContentSummariesRequest) (*GetContentSummariesResponse, error)
 	mustEmbedUnimplementedBackendServiceServer()
 }
 
@@ -128,6 +170,15 @@ func (UnimplementedBackendServiceServer) RenewToken(context.Context, *RenewToken
 }
 func (UnimplementedBackendServiceServer) GetUserDetails(context.Context, *GetUserDetailsRequest) (*GetUserDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserDetails not implemented")
+}
+func (UnimplementedBackendServiceServer) UploadFile(grpc.ClientStreamingServer[FileUploadRequest, FileUploadResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
+}
+func (UnimplementedBackendServiceServer) GetContentGlossary(context.Context, *GetContentGlossaryRequest) (*GetContentGlossaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetContentGlossary not implemented")
+}
+func (UnimplementedBackendServiceServer) GetContentSummaries(context.Context, *GetContentSummariesRequest) (*GetContentSummariesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetContentSummaries not implemented")
 }
 func (UnimplementedBackendServiceServer) mustEmbedUnimplementedBackendServiceServer() {}
 func (UnimplementedBackendServiceServer) testEmbeddedByValue()                        {}
@@ -240,6 +291,49 @@ func _BackendService_GetUserDetails_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BackendService_UploadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BackendServiceServer).UploadFile(&grpc.GenericServerStream[FileUploadRequest, FileUploadResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type BackendService_UploadFileServer = grpc.ClientStreamingServer[FileUploadRequest, FileUploadResponse]
+
+func _BackendService_GetContentGlossary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetContentGlossaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BackendServiceServer).GetContentGlossary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BackendService_GetContentGlossary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BackendServiceServer).GetContentGlossary(ctx, req.(*GetContentGlossaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BackendService_GetContentSummaries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetContentSummariesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BackendServiceServer).GetContentSummaries(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BackendService_GetContentSummaries_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BackendServiceServer).GetContentSummaries(ctx, req.(*GetContentSummariesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BackendService_ServiceDesc is the grpc.ServiceDesc for BackendService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -267,7 +361,21 @@ var BackendService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetUserDetails",
 			Handler:    _BackendService_GetUserDetails_Handler,
 		},
+		{
+			MethodName: "GetContentGlossary",
+			Handler:    _BackendService_GetContentGlossary_Handler,
+		},
+		{
+			MethodName: "GetContentSummaries",
+			Handler:    _BackendService_GetContentSummaries_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "UploadFile",
+			Handler:       _BackendService_UploadFile_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "backend/pb/backend.proto",
 }

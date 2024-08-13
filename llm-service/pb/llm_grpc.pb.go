@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	LlmService_GenerateNickname_FullMethodName = "/llm.LlmService/GenerateNickname"
+	LlmService_NanoContent_FullMethodName      = "/llm.LlmService/NanoContent"
 )
 
 // LlmServiceClient is the client API for LlmService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LlmServiceClient interface {
 	GenerateNickname(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[GenerateNicknameRequest, GenerateNicknameResponse], error)
+	NanoContent(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[NanoContentRequest, NanoContentResponse], error)
 }
 
 type llmServiceClient struct {
@@ -50,11 +52,25 @@ func (c *llmServiceClient) GenerateNickname(ctx context.Context, opts ...grpc.Ca
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type LlmService_GenerateNicknameClient = grpc.BidiStreamingClient[GenerateNicknameRequest, GenerateNicknameResponse]
 
+func (c *llmServiceClient) NanoContent(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[NanoContentRequest, NanoContentResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &LlmService_ServiceDesc.Streams[1], LlmService_NanoContent_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[NanoContentRequest, NanoContentResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type LlmService_NanoContentClient = grpc.ClientStreamingClient[NanoContentRequest, NanoContentResponse]
+
 // LlmServiceServer is the server API for LlmService service.
 // All implementations must embed UnimplementedLlmServiceServer
 // for forward compatibility.
 type LlmServiceServer interface {
 	GenerateNickname(grpc.BidiStreamingServer[GenerateNicknameRequest, GenerateNicknameResponse]) error
+	NanoContent(grpc.ClientStreamingServer[NanoContentRequest, NanoContentResponse]) error
 	mustEmbedUnimplementedLlmServiceServer()
 }
 
@@ -67,6 +83,9 @@ type UnimplementedLlmServiceServer struct{}
 
 func (UnimplementedLlmServiceServer) GenerateNickname(grpc.BidiStreamingServer[GenerateNicknameRequest, GenerateNicknameResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method GenerateNickname not implemented")
+}
+func (UnimplementedLlmServiceServer) NanoContent(grpc.ClientStreamingServer[NanoContentRequest, NanoContentResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method NanoContent not implemented")
 }
 func (UnimplementedLlmServiceServer) mustEmbedUnimplementedLlmServiceServer() {}
 func (UnimplementedLlmServiceServer) testEmbeddedByValue()                    {}
@@ -96,6 +115,13 @@ func _LlmService_GenerateNickname_Handler(srv interface{}, stream grpc.ServerStr
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type LlmService_GenerateNicknameServer = grpc.BidiStreamingServer[GenerateNicknameRequest, GenerateNicknameResponse]
 
+func _LlmService_NanoContent_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(LlmServiceServer).NanoContent(&grpc.GenericServerStream[NanoContentRequest, NanoContentResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type LlmService_NanoContentServer = grpc.ClientStreamingServer[NanoContentRequest, NanoContentResponse]
+
 // LlmService_ServiceDesc is the grpc.ServiceDesc for LlmService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -108,6 +134,11 @@ var LlmService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "GenerateNickname",
 			Handler:       _LlmService_GenerateNickname_Handler,
 			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "NanoContent",
+			Handler:       _LlmService_NanoContent_Handler,
 			ClientStreams: true,
 		},
 	},

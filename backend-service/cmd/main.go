@@ -28,11 +28,14 @@ func main() {
 
 	ur := repository.NewUserRepository(app.Db)
 
+	cr := repository.NewContentRepository(app.Db)
+
 	repository := repository.Repository{
-		User: ur,
+		User:    ur,
+		Content: cr,
 	}
 
-	server, err := gapi.NewServer(env, app.Db, repository, timeout)
+	server, err := gapi.NewServer(env, app.Db, app.Storage, repository, timeout)
 	if err != nil {
 		log.Fatal("Cannot create server :", err)
 	}

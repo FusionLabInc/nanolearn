@@ -180,7 +180,10 @@ class NLApiClient {
     };
 
     if (_apiConfig.bearerToken != null && customHeaders?.keys == null) {
-      final token = await _apiConfig.bearerToken!();
+      // final token = await _apiConfig.bearerToken!();
+      const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkX2F0IjoiMjAyNC0wOC0xOFQyMTowOToyNy45NDk2NzErMDE6MDAiLCJpZCI6IjE1ZGJhMGRhLTNmODktNDE4ZC1iYjI1LTkxZTdlZTMxZTZmMiIsImlzc3VlZF9hdCI6IjIwMjQtMDgtMTFUMjE6MDk6MjcuOTQ5NjcxKzAxOjAwIiwidXNlcm5hbWUiOiJRR3hwYm1zPSJ9.sPGIwRpfiMy-AVcPGVy5BmDAOZjS_wx1GcqS4s6QX2c";
+
       if (token.isNotEmpty) {
         headers["token"] = "Bearer $token";
         // headers["ngrok-skip-browser-warning"] = "ess";

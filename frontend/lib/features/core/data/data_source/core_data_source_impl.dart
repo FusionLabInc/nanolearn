@@ -34,7 +34,7 @@ class CoreDataSourceImpl implements CoreDataSource {
     final data = response.data;
 
     final userDetails =
-        UserDetails.fromJson(data["data"]["user"] as Map<String, dynamic>);
+        UserDetails.fromJson(data["data"] as Map<String, dynamic>);
     return userDetails;
   }
 }

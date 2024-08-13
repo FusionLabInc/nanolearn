@@ -11,6 +11,7 @@ import (
 	"github.com/FusionLabInc/nanolearn/llm-service/pb"
 	"github.com/FusionLabInc/nanolearn/llm-service/repository"
 	"github.com/FusionLabInc/nanolearn/llm-service/utils/logger"
+	"github.com/unidoc/unipdf/v3/common/license"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -25,12 +26,23 @@ func main() {
 
 	env := app.Env
 
+	err := license.SetMeteredKey(env.UnidocApiKey)
+	if err != nil {
+		panic(err)
+	}
+
 	timeout := time.Duration(contextTimeout) * time.Second
 
 	sr := repository.NewSetupRepository(app.Llm)
 
+	cr := repository.NewContentRepository(app.Llm, app.Db)
+
+	ur := repository.NewUserRepository(app.Db)
+
 	repository := domain.Repository{
-		Setup: sr,
+		Setup:   sr,
+		Content: cr,
+		User:    ur,
 	}
 
 	server, err := gapi.NewServer(env, app.Llm, repository, timeout)

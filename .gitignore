@@ -11,8 +11,9 @@ backend-service/.env
 gateway-service/.env
 
 # frontend
-frontend/.env.dart
+frontend/lib/.env.dart
 
-# # eureka-api-business-service-python
-# eureka-api-business-service-python/.venv
-# eureka-api-business-service-python/.env
+# backend-service
+llm-service/cert/*.pem
+llm-service/commands.txt
+llm-service/.env

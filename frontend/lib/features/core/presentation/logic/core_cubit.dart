@@ -1,4 +1,5 @@
 import 'package:frontend/core/index.dart';
+import 'package:frontend/features/core/data/index.dart';
 import 'package:frontend/utils/index.dart';
 import 'package:bloc/bloc.dart';
 import 'package:frontend/features/authentication/presentation/index.dart';
@@ -19,6 +20,7 @@ class CoreCubit extends Cubit<CoreState>
 
   String? username;
   String? superadminCompanyName;
+  List<Content>? contents;
 
   Future<bool> uploadImageToFirebaseStorageLogic(
     UploadImageParam params,
@@ -43,6 +45,7 @@ class CoreCubit extends Cubit<CoreState>
     return response.maybeWhen(
       success: (data) async {
         username = data.username;
+        contents = data.contents;
         emit(CoreLoaded(data: data));
         return data;
       },

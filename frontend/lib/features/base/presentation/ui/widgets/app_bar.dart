@@ -59,18 +59,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: AppConstants.appPrimaryColor.withOpacity(.5),
+                          color: AppConstants.appPrimaryColor.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(30)),
                       child: Container(
                         decoration: BoxDecoration(
                             color:
-                                AppConstants.appPrimaryColor.withOpacity(0.2),
+                                AppConstants.appPrimaryColor.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(30)),
                         padding: const EdgeInsets.all(2),
                         margin: const EdgeInsets.all(2),
                         child: CircleAvatar(
                           backgroundColor:
-                              AppConstants.appPrimaryColor.withOpacity(0.2),
+                              AppConstants.appPrimaryColor.withOpacity(0.4),
                           child: Icon(
                             Icons.person_outline,
                             color: AppConstants.appBlack,
@@ -113,18 +113,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: AppConstants.appPrimaryColor.withOpacity(.5),
+                          color: AppConstants.appPrimaryColor.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(30)),
                       child: Container(
                         decoration: BoxDecoration(
                             color:
-                                AppConstants.appPrimaryColor.withOpacity(0.2),
+                                AppConstants.appPrimaryColor.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(30)),
                         padding: const EdgeInsets.all(2),
                         margin: const EdgeInsets.all(2),
                         child: CircleAvatar(
                           backgroundColor:
-                              AppConstants.appPrimaryColor.withOpacity(0.2),
+                              AppConstants.appPrimaryColor.withOpacity(0.4),
                           child: Icon(
                             Icons.person_outline,
                             color: AppConstants.appBlack,

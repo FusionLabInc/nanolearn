@@ -7,11 +7,13 @@ import (
 )
 
 type Env struct {
-	AppEnv            string `mapstructure:"ENVIRONMENT"`
-	AppServerPort     string `mapstructure:"SERVER_PORT"`
-	AppServerUrl      string `mapstructure:"SERVER_URL"`
-	TokenSymmetricKey string `mapstructure:"TOKEN_SYMMETRIC_KEY"`
-	GeminiApiKey      string `mapstructure:"GEMINI_API_KEY"`
+	AppEnv             string `mapstructure:"ENVIRONMENT"`
+	AppServerPort      string `mapstructure:"SERVER_PORT"`
+	AppServerUrl       string `mapstructure:"SERVER_URL"`
+	TokenSymmetricKey  string `mapstructure:"TOKEN_SYMMETRIC_KEY"`
+	GeminiApiKey       string `mapstructure:"GEMINI_API_KEY"`
+	UnidocApiKey       string `mapstructure:"UNIDOC_API_KEY"`
+	GoogleConfigBase64 string `mapstructure:"GOOGLE_CONFIG_BASE64"`
 }
 
 func NewEnv() *Env {

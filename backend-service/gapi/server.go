@@ -14,6 +14,7 @@ import (
 type Server struct {
 	pb.UnimplementedBackendServiceServer
 	Db         *bootstrap.Database
+	Storage    *bootstrap.Storage
 	TokenMaker token.Maker
 	Env        *bootstrap.Env
 	Timeout    time.Duration
@@ -21,7 +22,7 @@ type Server struct {
 }
 
 // NewServer creates a new gRPC server
-func NewServer(env *bootstrap.Env, db *bootstrap.Database, r repository.Repository, timeout time.Duration) (*Server, error) {
+func NewServer(env *bootstrap.Env, db *bootstrap.Database, storage *bootstrap.Storage, r repository.Repository, timeout time.Duration) (*Server, error) {
 	tokenMaker, err := token.NewJWTMaker(env.TokenSymmetricKey)
 
 	if err != nil {
@@ -31,6 +32,7 @@ func NewServer(env *bootstrap.Env, db *bootstrap.Database, r repository.Reposito
 
 	server := &Server{
 		Db:         db,
+		Storage:    storage,
 		TokenMaker: tokenMaker,
 		Env:        env,
 		Timeout:    timeout,

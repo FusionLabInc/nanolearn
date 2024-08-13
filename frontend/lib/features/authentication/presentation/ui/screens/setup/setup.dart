@@ -87,7 +87,7 @@ class _SetupPageState extends State<SetupPage> {
                               ),
                     ),
                     TextSpan(
-                      text: "Nano ",
+                      text: "`Nano` ",
                       style:
                           Theme.of(context).textTheme.displayMedium!.copyWith(
                                 letterSpacing: 0.03.sp,

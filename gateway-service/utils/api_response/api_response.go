@@ -148,6 +148,7 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 						"user_id":    rr.UserId,
 						"created_at": rr.CreatedAt,
 						"username":   rr.Username,
+						"contents":   rr.Contents,
 					},
 				},
 			})
@@ -185,6 +186,106 @@ func Respond(ctx *gin.Context, response interface{}) interface{} {
 				"nickname": rr.Nickname,
 			},
 		})
+
+	case *pb.FileUploadResponse:
+
+		rr := r
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "File uploaded successfully",
+			"data": gin.H{
+				"file_name": rr.FileName,
+			},
+		})
+
+	case *llm.NanoContentResponse:
+
+		rr := r
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "Content processed successfully",
+			"data": gin.H{
+				"file_name": rr.FileName,
+			},
+		})
+
+	case *pb.GetContentGlossaryResponse:
+
+		rr := r
+
+		switch rr.Code {
+
+		case int64(codes.OK):
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": rr.Message,
+				"data": gin.H{
+					"glossary": rr.Glossary,
+				},
+			})
+
+		case int64(codes.Internal):
+
+			ctx.JSON(http.StatusInternalServerError, BaseErrorResponse(rr.Message))
+
+		case int64(codes.InvalidArgument):
+
+			ctx.JSON(http.StatusBadRequest, BaseErrorResponse(rr.Message))
+
+		case int64(codes.NotFound):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		case int64(codes.AlreadyExists):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		default:
+
+			return nil
+
+		}
+
+	case *pb.GetContentSummariesResponse:
+
+		rr := r
+
+		switch rr.Code {
+
+		case int64(codes.OK):
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":  "success",
+				"message": rr.Message,
+				"data": gin.H{
+					"summaries": rr.Summaries,
+				},
+			})
+
+		case int64(codes.Internal):
+
+			ctx.JSON(http.StatusInternalServerError, BaseErrorResponse(rr.Message))
+
+		case int64(codes.InvalidArgument):
+
+			ctx.JSON(http.StatusBadRequest, BaseErrorResponse(rr.Message))
+
+		case int64(codes.NotFound):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		case int64(codes.AlreadyExists):
+
+			ctx.JSON(http.StatusNotFound, BaseErrorResponse(rr.Message))
+
+		default:
+
+			return nil
+
+		}
 
 	default:
 

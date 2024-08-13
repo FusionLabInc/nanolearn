@@ -12,6 +12,7 @@ type Env struct {
 	AppServerPort        string        `mapstructure:"SERVER_PORT"`
 	AppServerUrl         string        `mapstructure:"SERVER_URL"`
 	GoogleConfigBase64   string        `mapstructure:"GOOGLE_CONFIG_BASE64"`
+	StorageBucketUrl     string        `mapstructure:"STORAGE_BUCKET_URL"`
 	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`

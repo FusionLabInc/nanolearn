@@ -23,10 +23,16 @@ func (s *Server) GetUserDetails(ctx context.Context, req *pb.GetUserDetailsReque
 
 	}
 
-	return api_response.Success(&pb.GetUserDetailsResponse{}, "User successfully fethed", map[string]interface{}{
-		"user_id":    userId,
-		"created_at": dbUser.CreatedAt,
-		"username":   dbUser.Username,
-	}).(*pb.GetUserDetailsResponse), nil
+	userMap := make(map[string]interface{})
+
+	userMap["user_id"] = userId
+
+	userMap["created_at"] = dbUser.CreatedAt
+
+	userMap["username"] = dbUser.Username
+
+	userMap["contents"] = dbUser.Contents
+
+	return api_response.Success(&pb.GetUserDetailsResponse{}, "User successfully fethed", userMap).(*pb.GetUserDetailsResponse), nil
 
 }
